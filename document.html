@@ -1,0 +1,680 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tài Liệu Hướng Dẫn Vận Hành Hệ Thống EA HUB</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <style>
+        :root {
+            --primary-color: #1abb9c;
+            --secondary-color: #2c3e50;
+            --sidebar-bg: #2a3f54;
+            --text-main: #333333;
+            --text-light: #73879c;
+            --border-color: #e6e9ed;
+            --bg-light: #f7f7f7;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            color: var(--text-main);
+            background-color: var(--bg-light);
+            line-height: 1.6;
+            display: flex;
+        }
+
+		code {
+			font-family: Consolas, monospace;
+			background-color: #f9f2f4;
+			color: #c7254e;
+			padding: 2px 6px;
+			border-radius: 4px;
+			font-size: 13px;
+		}
+        /* Sidebar Navigation */
+        .sidebar {
+            width: 280px;
+            background-color: var(--sidebar-bg);
+            height: 100vh;
+            position: fixed;
+            top: 0;
+            left: 0;
+            overflow-y: auto;
+            padding: 20px 10px;
+            color: #fff;
+        }
+
+        .sidebar-brand {
+            font-size: 22px;
+            font-weight: 800;
+            color: #fff;
+            margin-bottom: 30px;
+            padding-left: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-transform: uppercase;
+        }
+
+        .sidebar-brand i { color: var(--primary-color); }
+
+        .sidebar-menu { list-style: none; }
+        .sidebar-menu li { margin-bottom: 5px; }
+
+        .sidebar-menu a {
+            color: #e1e8ed;
+            text-decoration: none;
+            padding: 12px 15px;
+            display: block;
+            border-radius: 4px;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .sidebar-menu a:hover, .sidebar-menu a.active {
+            background-color: rgba(255, 255, 255, 0.05);
+            color: #fff;
+            border-left: 4px solid var(--primary-color);
+            padding-left: 11px;
+        }
+
+        /* Main Content Container */
+        .main-content {
+            margin-left: 280px;
+            padding: 30px 40px;
+            width: calc(100% - 280px);
+            max-width: 1300px;
+        }
+
+        header {
+            margin-bottom: 40px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid var(--border-color);
+        }
+
+        header h1 {
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--secondary-color);
+            margin-bottom: 8px;
+        }
+
+        header p {
+            color: var(--text-light);
+            font-size: 15px;
+        }
+
+        .doc-section {
+            margin-bottom: 40px;
+            scroll-margin-top: 30px;
+            background: #fff;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+            border: 1px solid var(--border-color);
+        }
+
+        .doc-section h2 {
+            font-size: 22px;
+            font-weight: 700;
+            color: var(--secondary-color);
+            margin-bottom: 25px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding-bottom: 15px;
+            border-bottom: 1px dashed var(--border-color);
+        }
+
+        .doc-section h2 i { color: var(--primary-color); }
+
+        .doc-section h3 {
+            font-size: 16px;
+            font-weight: 600;
+            color: #333;
+            margin: 25px 0 15px 0;
+            padding-left: 10px;
+            border-left: 3px solid var(--primary-color);
+        }
+
+        p, ul, ol {
+            margin-bottom: 15px;
+            font-size: 14px;
+            color: #555;
+            line-height: 1.7;
+        }
+
+        ul, ol { padding-left: 15px; }
+        li { margin-bottom: 8px; }
+
+        .doc-img {
+            width: 100%;
+            max-width: 100%;
+            height: auto;
+            margin: 20px 0;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+        }
+
+        /* Khối hiển thị thông số */
+        .param-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .param-card {
+            background: #f8fafc;
+            border: 1px solid var(--border-color);
+            padding: 15px;
+            border-radius: 6px;
+        }
+
+        .param-card strong {
+            display: block;
+            color: var(--secondary-color);
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+
+        /* Badge Styling */
+        .badge {
+            display: inline-block;
+            padding: 3px 8px;
+            font-size: 11px;
+            font-weight: 600;
+            border-radius: 4px;
+            color: #fff;
+        }
+        .badge-success { background-color: #1abb9c; }
+        .badge-warning { background-color: #f0ad4e; }
+        .badge-danger { background-color: #d9534f; }
+        .badge-info { background-color: #3498db; }
+
+        /* Khối Ghi chú */
+        .note-block {
+            background-color: #e8f4f8;
+            border-left: 4px solid #3498db;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 0 4px 4px 0;
+        }
+        .note-block i { color: #3498db; margin-right: 5px; }
+
+        html { scroll-behavior: smooth; }
+    </style>
+</head>
+<body>
+
+    <nav class="sidebar">
+        <div class="sidebar-brand">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="#26B99A" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="width: 28px; height: 28px; min-width: 28px;">
+				<line x1="18" y1="20" x2="18" y2="4" stroke="#1ABB9C"></line>
+				<line x1="6" y1="20" x2="6" y2="12"></line>
+				<rect x="14" y="7" width="8" height="9" rx="1" fill="#1ABB9C" stroke="#1ABB9C" stroke-width="1"></rect>
+				<rect x="2" y="14" width="8" height="5" rx="1" fill="#2A3F54"></rect>
+				<path d="M12 2A10 10 0 0 0 2 12" stroke-dasharray="2 2" opacity="0.5"></path>
+				<circle cx="18" cy="11" r="1.5" fill="#2A3F54" stroke="#fff" stroke-width="1"></circle>
+			</svg> EA HUB
+        </div>
+        <ul class="sidebar-menu">
+            <li><a href="#dashboard" class="active"><i class="fa fa-dashboard"></i> 1. Trang Chủ Dashboard</a></li>
+            <li><a href="#bot-manager"><i class="fa fa-cubes"></i> 2. Quản Lý Tài Khoản Bot</a></li>
+            <li><a href="#bot-settings"><i class="fa fa-sliders"></i> 3. Cấu Hình Chiến Lược</a></li>
+            <li><a href="#statistics"><i class="fa fa-line-chart"></i> 4. Thống Kê Số Dư & Quỹ</a></li>
+            <li><a href="#license-history"><i class="fa fa-key"></i> 5. Lịch Sử Cấp Bản Quyền</a></li>
+            <li><a href="#system-log"><i class="fa fa-shield"></i> 6. Nhật Ký Bảo Mật Log</a></li>
+			<li><a href="#client-dashboard"><i class="fa fa-desktop"></i> 7. Cổng Khách Hàng</a></li>
+			<li><a href="#mt5-setup"><i class="fa fa-gears"></i> 8. Cấu Hình Thiết Lập MT5</a></li>
+			<li><a href="#bot-lifecycle"><i class="fa fa-refresh"></i> 9. Vòng Đời Đi Lệnh Của Bot</a></li>
+        </ul>
+    </nav>
+
+    <main class="main-content">
+        <header>
+            <h1>HƯỚNG DẪN VẬN HÀNH HỆ THỐNG EA HUB</h1>
+            <p>Tài liệu hướng dẫn theo dõi chỉ số tài chính và thiết lập chiến lược giao dịch dành cho Khách hàng</p>
+        </header>
+
+        <section id="dashboard" class="doc-section">
+            <h2><i class="fa fa-dashboard"></i> 1. Trang Chủ Dashboard (Màn Hình Tổng Quan)</h2>
+            <p>Trang chủ cung cấp bức tranh toàn cảnh về sức khỏe của tài khoản giao dịch trực tuyến theo thời gian thực (real-time). Khách hàng có thể dễ dàng nắm bắt các chỉ số tài chính cốt lõi, số lượng Robot đang hoạt động và mức độ rủi ro chung của danh mục đầu tư ngay tại màn hình tập trung này.</p>
+            
+            <img src="images/guide/1.1.png" alt="Giao diện Trang Chủ Dashboard" class="doc-img" />
+
+            <h3>Bốn khối thẻ chỉ số tổng quan ở trên cùng:</h3>
+            <div class="param-grid">
+                <div class="param-card">
+                    <strong>TỔNG VỐN QUẢN LÝ (BALANCE)</strong>
+                    Tổng số tiền gốc thực tế hiện có trong tài khoản giao dịch. Chỉ số này phản hồi và đồng bộ tự động từ tài khoản của Khách hàng về hệ thống lưu trữ theo chu kỳ mỗi phút.
+                </div>
+                <div class="param-card">
+                    <strong>BOT ĐANG KHỞI CHẠY</strong>
+                    Số lượng hệ thống Robot đang được bật công tắc kích hoạt và cho phép rà soát thị trường để vào lệnh tự động (Trạng thái Đang chạy / Running).
+                </div>
+                <div class="param-card">
+                    <strong>TỔNG TÀI SẢN THỰC (EQUITY)</strong>
+                    Số vốn thực tế còn lại trong tài khoản sau khi đã cộng hoặc trừ đi các khoản tiền của các vị thế lệnh đang thả nổi trên thị trường.
+                </div>
+                <div class="param-card">
+                    <strong>LICENSE QUÁ HẠN</strong>
+                    Thông báo nhắc nhở thời hạn bản quyền phần mềm đã kết thúc. Khách hàng cần liên hệ bộ phận hỗ trợ để gia hạn nhằm tránh tình trạng Robot bị ngắt kết nối giao dịch.
+                </div>
+            </div>
+
+            <h3>Các khối phân tích chuyên sâu ở thân trang:</h3>
+            <ul>
+                <li><strong>Phân Bổ Rủi Ro Hệ Thống:</strong> Phân loại mức độ an toàn của tài khoản dựa trên tỷ lệ sụt giảm tài sản tạm thời do gồng lệnh âm (Drawdown %):
+                    <ul>
+                        <li><span class="badge badge-success">An toàn (&lt; 10%)</span>: Tài khoản vận hành ổn định trong biên độ quản lý vốn mục tiêu.</li>
+                        <li><span class="badge badge-warning">Cảnh báo (10% - 30%)</span>: Thị trường đang đi ngược xu hướng, Robot đang triển khai chuỗi lệnh bảo vệ tài khoản.</li>
+                        <li><span class="badge badge-danger">Nguy hiểm (&gt; 30%)</span>: Trạng thái thị trường biến động mạnh, Khách hàng cần theo dõi sát để chủ động phương án xử lý hoặc sử dụng nút ngắt khẩn cấp nếu cần.</li>
+                    </ul>
+                </li>
+                <li><strong>Top Tài Khoản Gồng Lỗ Lớn Nhất (Drawdown):</strong> Bảng xếp hạng hiển thị trực quan các tài khoản đang có tỷ lệ âm trạng thái cao nhất để Khách hàng dễ dàng ưu tiên kiểm tra hạ tải hoặc điều chỉnh vốn.</li>
+                <li><strong>Tài Khoản Kết Nối Hệ Thống Mới Nhất:</strong> Danh sách cập nhật nhanh các tài khoản vừa thực hiện đồng bộ tín hiệu thành công, hiển thị đầy đủ Số tài khoản, Họ tên, Số dư và trạng thái kết nối trực tuyến.</li>
+            </ul>
+        </section>
+
+        <section id="bot-manager" class="doc-section">
+            <h2><i class="fa fa-cubes"></i> 2. Quản Lý Tài Khoản Bot (Danh Sách License)</h2>
+            <p>Phân hệ hiển thị thông tin chi tiết về quyền truy cập, theo dõi số liệu và thời hạn hiệu lực của từng mã bản quyền phần mềm. Khách hàng sử dụng bộ lọc tìm kiếm ở đầu bảng để tra cứu nhanh thông tin theo số tài khoản hoặc trạng thái kích hoạt của Robot.</p>
+            
+            <img src="images/guide/2.1.png" alt="Giao diện Quản Lý Tài Khoản Bot" class="doc-img" />
+
+            <div class="param-grid">
+                <div class="param-card">
+                    <strong>Nút "Cấp mới License cho Khách"</strong>
+                    Tính năng hỗ trợ thiết lập nhanh một tài khoản sử dụng mới trên Web Portal, đồng thời khởi tạo mã khóa bản quyền ngẫu nhiên gồm 16 ký tự với thời hạn mặc định là 1 năm.
+                </div>
+                <div class="param-card">
+                    <strong>Mã Bảo Mật License Key</strong>
+                    Chuỗi khóa bảo mật duy nhất được cấp cho từng tài khoản. Khách hàng bắt buộc phải nhập chính xác chuỗi ký tự này vào bảng tham số của Robot trên phần mềm MetaTrader 5 để xác thực quyền giao dịch.
+                </div>
+                <div class="param-card">
+                    <strong>Số dư (Balance)</strong>
+                    Số tiền vốn gốc hiện tại có trong tài khoản giao dịch, liên tục được cập nhật tự động qua trục kết nối của phần mềm máy trạm.
+                </div>
+                <div class="param-card">
+                    <strong>Ngày hết hạn</strong>
+                    Mốc thời gian cuối cùng mã bản quyền có hiệu lực. Khi vượt quá thời hạn này, phần mềm sẽ tự động tạm dừng giao dịch cho đến khi hoàn tất thủ tục gia hạn chu kỳ mới.
+                </div>
+                <div class="param-card">
+                    <strong>Trạng thái Bot (Tick Xanh / Chéo Đỏ)</strong>
+                    Biểu tượng hiển thị quyền giao dịch từ xa. Nếu chuyển sang trạng thái màu đỏ (Tạm dừng), Robot tại phần mềm máy trạm sẽ lập tức bị khóa và không được phép mở thêm lệnh mới.
+                </div>
+                <div class="param-card">
+                    <strong>Nút "Cấu hình" (Màu vàng)</strong>
+                    Lối tắt truy cập thẳng vào biểu mẫu thiết lập chuyên sâu các thông số chiến lược, khoảng cách lưới lệnh và chỉ tiêu chốt lời riêng biệt cho tài khoản.
+                </div>
+            </div>
+        </section>
+
+        <section id="bot-settings" class="doc-section">
+            <h2><i class="fa fa-sliders"></i> 3. Chỉnh Sửa Cấu Hình Chiến Lược Chi Tiết (Settings Form)</h2>
+            <p>Giao diện điều khiển cho phép cấu hình và thiết lập toàn bộ hành vi giao dịch, quy mô phân bổ vốn và các lớp rào chắn phòng thủ của Robot. Biểu mẫu được phân định thành 4 phân khu chức năng rõ ràng để Khách hàng tiện thao tác.</p>
+
+            <img src="images/guide/3.1.png" alt="Giao diện Chỉnh Sửa Cấu Hình Chiến Lược" class="doc-img" />
+
+            <h3>I. THÔNG TIN KHÁCH HÀNG & BẢN QUYỀN LICENSE</h3>
+            <p>Phân khu quản lý thông tin tài khoản truy cập, thiết lập số tài khoản giao dịch đích danh và kiểm soát thời hạn bản quyền phần mềm.</p>
+            <div class="param-grid">
+                <div class="param-card">
+                    <strong>Tên đăng nhập & Mật khẩu Web</strong>
+                    - <code>Tên đăng nhập</code>: Tên tài khoản dùng để đăng nhập vào cổng thông tin Client Portal (Ví dụ: <code>khachhang_vanggiam</code>).<br>
+                    - <code>Mật khẩu Web</code>: Mật khẩu bảo mật dùng để đăng nhập xem báo cáo tài chính trực tuyến từ xa.
+                </div>
+                <div class="param-card">
+                    <strong>Họ tên khách hàng & Số TK MT5 *</strong>
+                    - <code>Họ tên khách hàng</code>: Tên đầy đủ của chủ tài khoản sở hữu để thuận tiện cho việc đối soát.<br>
+                    - <code>Số TK MT5 *</code>: Số tài khoản giao dịch MetaTrader 5, bắt buộc phải trùng khớp chính xác với số tài khoản đang chạy trên phần mềm máy trạm.
+                </div>
+                <div class="param-card">
+                    <strong>Mã License Key & Ngày hết hạn</strong>
+                    - <code>Mã License Key</code>: Chuỗi khóa bảo mật được cấp cố định và duy nhất cho số tài khoản giao dịch tương ứng.<br>
+                    - <code>Ngày hết hạn</code>: Mốc ngày dừng hiệu lực của bản quyền phần mềm. Có thể gia hạn bằng cách nhấp chọn biểu tượng lịch tích hợp.
+                </div>
+                <div class="param-card">
+                    <strong>Trạng thái chạy lệnh</strong>
+                    Lựa chọn lệnh điều khiển bật/tắt quyền giao dịch từ xa:
+                    <br>- <code>1: Khởi chạy từ xa</code>: Cho phép Robot tự động tìm kiếm tín hiệu và giao dịch trên thị trường.
+                    <br>- <code>0: Tạm ngừng từ xa</code>: Đóng băng quyền giao dịch, không cho phép Robot mở thêm vị thế lệnh mới.
+                </div>
+            </div>
+
+            <h3>II. THIẾT LẬP THAM SỐ CHIẾN LƯỢC ROBOT TRADING</h3>
+            <p>Khu vực tùy chỉnh các thông số quản trị khối lượng lệnh, phương thức chốt lời và chu kỳ lọc tín hiệu kỹ thuật của thuật toán.</p>
+            <div class="param-grid">
+                <div class="param-card">
+                    <strong>Initial Lot & Lot Multi</strong>
+                    - <code>Initial Lot</code>: Khối lượng giao dịch ban đầu (tính theo Lot) của vị thế lệnh đầu tiên khi mở chu kỳ mới.<br>
+                    - <code>Lot Multi</code>: Hệ số nhân tăng trưởng khối lượng cho các tầng lệnh tiếp theo khi thị trường đi ngược xu hướng (Ví dụ: nhân lũy tiến <code>1.5</code>).
+                </div>
+                <div class="param-card">
+                    <strong>Max Orders</strong>
+                    Ngưỡng giới hạn bảo vệ. Số lượng lệnh tối đa được phép tồn tại trong một chuỗi lệnh giao dịch. Khi số lệnh đạt tới mốc này, Robot sẽ dừng không mở thêm lệnh mới để bảo vệ số dư tài khoản.
+                </div>
+                <div class="param-card">
+                    <strong>Chế độ TP Mode, TP Pips & TP USD ($)</strong>
+                    - <code>Chế độ TP Mode</code>: Lựa chọn cách thức tính toán mục tiêu chốt lời (<code>0: Tính theo Điểm giá/Pip</code> hoặc <code>1: Tính theo Tiền mặt Đô-la/USD</code>).<br>
+                    - <code>TP Pips</code>: Khoảng cách điểm giá mục tiêu để đóng lời (Áp dụng khi chọn chốt lời theo Pip).<br>
+                    - <code>TP USD ($)</code>: Tổng số tiền lãi ròng bằng Đô-la mong muốn của toàn bộ giỏ lệnh để kích hoạt lệnh tự động đóng sạch trạng thái.
+                </div>
+                <div class="param-card">
+                    <strong>RSI Period, RSI TF & Magic Num</strong>
+                    - <code>RSI Period</code>: Số chu kỳ tính toán của chỉ báo đo lường động lượng xu hướng (Mặc định: <code>14</code>).<br>
+                    - <code>RSI TF</code>: Khung thời gian của đồ thị nến (Ví dụ: Khung 1 phút <code>M1</code>, Khung 5 phút <code>M5</code>) dùng làm dữ liệu đầu vào cho Robot phân tích.<br>
+                    - <code>Magic Num</code>: Mã số nhận diện lệnh riêng biệt của Robot, giúp quản lý giỏ lệnh không bị trùng lẫn hoặc chồng chéo nếu tài khoản chạy đồng thời nhiều phần mềm khác nhau.
+                </div>
+            </div>
+
+            <h3>III. KHUNG GIỜ GIAO DỊCH & XÁC NHẬN CHỐNG BÃO GIÁ</h3>
+            <p>Hệ thống rào chắn phòng thủ, hỗ trợ kiểm soát rủi ro và bảo vệ tài khoản trước các giai đoạn thị trường biến động mạnh hoặc giật một chiều do tin tức tức thời.</p>
+            <div class="param-grid">
+                <div class="param-card">
+                    <strong>Sử dụng bộ lọc giờ, Giờ bắt đầu & Giờ kết thúc</strong>
+                    - <code>Sử dụng bộ lọc giờ</code>: Tích chọn để kích hoạt tính năng kiểm soát thời gian bắt đầu chu kỳ mở lệnh mới.<br>
+                    - <code>Giờ bắt đầu</code> / <code>Giờ kết thúc</code>: Khoảng thời gian trong ngày cho phép Robot mở lệnh đầu tiên (L1), được quy chuẩn theo múi giờ Việt Nam để Khách hàng dễ cấu hình.
+                </div>
+                <div class="param-card">
+                    <strong>Phút khóa sát phiên & Xác nhận kép từ lệnh (N)</strong>
+                    - <code>Phút khóa sát phiên</code>: Số phút tạm dừng quét tín hiệu trước khi kết thúc khung giờ cho phép, ngăn chặn mở vị thế mới ở thời điểm nhạy cảm.<br>
+                    - <code>Xác nhận kép từ lệnh</code>: Tính năng bảo vệ nâng cao chống bão giá. Khi chuỗi lệnh kéo sâu đạt tới số tầng quy định (Ví dụ: từ lệnh thứ 10), đường giá phải thỏa mãn chu kỳ kiểm tra dao động hai lần tại vùng giá mục tiêu thì Robot mới tiếp tục vào lệnh.
+                </div>
+                <div class="param-card">
+                    <strong>Bật chức năng chốt cặp, Áp dụng từ tầng & Lợi nhuận cặp ($)</strong>
+                    - <code>Bật chức năng chốt cặp</code>: Kích hoạt tính năng cắt tỉa và tất toán sớm từng cặp lệnh để giảm áp lực ký quỹ cho tài khoản.<br>
+                    - <code>Áp dụng từ tầng</code>: Vị trí tầng lệnh bắt đầu áp dụng cơ chế cắt tỉa (Ví dụ: từ lệnh thứ 9 trở đi).<br>
+                    - <code>Lợi nhuận cặp ($)</code>: Chỉ tiêu số tiền lời dương bằng USD của hai vị thế lệnh được chọn để Robot tự động thực hiện đóng cặp sớm.
+                </div>
+                <div class="param-card">
+                    <strong>Chốt dần về & Basket Trailing (%)</strong>
+                    - <code>Chốt dần về</code>: Tính năng cho phép lặp lại quy trình cắt tỉa cặp lệnh liên tục khi giá có sự dao động mạnh trong biên độ hẹp.<br>
+                    - <code>Basket Trailing (%)</code>: Tính năng dời điểm chốt lời tổng chạy đuổi theo xu hướng thị trường, giúp tối đa hóa biên lợi nhuận của toàn bộ giỏ lệnh khi thị trường đi đúng hướng.
+                </div>
+            </div>
+
+            <h3>IV. CẤU HÌNH KHOẢNG CÁCH LƯỚI GRID ĐỘNG (PIPS)</h3>
+            <p>Ma trận thiết lập khoảng cách an toàn giữa các tầng lệnh tiếp theo của hệ thống, bao gồm 25 ô cấu hình từ <strong>G1 đến G25</strong>.</p>
+            <ul>
+                <li><strong>Ý nghĩa:</strong> Số liệu nhập tại các ô biểu thị khoảng cách tối thiểu (đo bằng Điểm giá/Pips) mà thị trường phải đi ngược hướng tính từ vị trí lệnh trước đó để đáp ứng điều kiện mở vị thế lệnh bảo vệ tiếp theo.</li>
+                <li><strong>Ví dụ thực tế:</strong> Nếu cấu hình mặc định là G1=10, G2=20, G3=30... nghĩa là lệnh thứ 2 mở cách lệnh thứ nhất 10 Pips, lệnh thứ 3 mở cách lệnh thứ hai 20 Pips. Việc nới rộng khoảng cách ở các tầng lệnh có khối lượng lớn giúp Khách hàng dãn biên rủi ro và tăng độ an toàn tuyệt đối cho tài sản.</li>
+            </ul>
+        </section>
+
+        <section id="statistics" class="doc-section">
+            <h2><i class="fa fa-line-chart"></i> 4. Thống Kê Số Dư & Quỹ (Fund Monitor)</h2>
+            <p>Màn hình này là công cụ hỗ trợ kiểm tra và đối soát dòng vốn đầu tư dành cho Khách hàng để theo dõi biến động tài chính thực tế của các tài khoản giao dịch đang cắm Robot.</p>
+            
+            <img src="images/guide/4.1.png" alt="Giao diện Thống Kê Số Dư & Quỹ" class="doc-img" />
+
+            <h3>A. Hệ thống 4 khối thẻ chỉ số tổng hợp (Top Widgets):</h3>
+            <p>Cung cấp số liệu tổng lực và trạng thái lũy kế của toàn bộ danh mục tài khoản:</p>
+            <ul>
+                <li><strong>Khối 1 - Tổng Tài Khoản:</strong> Số lượng tài khoản giao dịch đã được liên kết và thiết lập thành công trên hệ thống điều khiển.</li>
+                <li><strong>Khối 2 - Bot Trực Tuyến:</strong> Số lượng hệ thống Robot đang ở trạng thái hoạt động trực tuyến và sẵn sàng giao dịch trên thị trường.</li>
+                <li><strong>Khối 3 - Tổng Vốn Quản Lý:</strong> Số tiền vốn gốc lũy kế hiện có, đại diện cho tổng quy mô dòng vốn đầu tư đang được vận hành.</li>
+                <li><strong>Khối 4 - License Hết Hạn:</strong> Tổng số lượng tài khoản đã hết hạn sử dụng bản quyền cần được nạp phí chu kỳ để tiếp tục hoạt động.</li>
+            </ul>
+
+            <h3>B. Bảng dữ liệu báo cáo chi tiết và Bộ lọc trạng thái rủi ro:</h3>
+            <p>Khung hiển thị chi tiết số liệu tài chính thời gian thực của từng tài khoản giao dịch cụ thể:</p>
+            <ol>
+                <li><strong>Đối soát Số dư (Balance) và Tài sản thực (Equity):</strong> Giúp Khách hàng kiểm tra song song giữa số tiền vốn gốc ban đầu và số tiền thực tế hiện có sau khi đã tính toán các lệnh đang chạy. Nếu hai con số này bằng nhau, tài khoản hiện tại đang ở trạng thái an toàn tuyệt đối và không có lệnh thả nổi.</li>
+                <li><strong>Mức sụt giảm tạm thời (Drawdown) dạng Progress Bar:</strong> Thanh đồ thị biểu thị tỷ lệ phần trăm vốn đang bị sụt giảm tạm thời do gồng lỗ vị thế, tự động đổi màu sắc cảnh báo theo các mức độ rủi ro để Khách hàng dễ nhận diện.</li>
+                <li><strong>Bộ lọc Trạng thái Rủi ro (Drawdown Filter):</strong> Tính năng phân loại nhanh danh sách tài khoản theo các hạn mức rủi ro đã quy ước (An toàn &lt;10%, Cảnh báo 10%-30%, Nguy hiểm &gt;30%), giúp Khách hàng tập trung theo dõi các tài khoản cần can thiệp vốn hoặc điều chỉnh thông số khi thị trường có biến động mạnh.</li>
+            </ol>
+        </section>
+
+        <section id="license-history" class="doc-section">
+            <h2><i class="fa fa-key"></i> 5. Nhật Ký Lịch Sử Cấp Mới & Gia Hạn Bản Quyền Bot (License Log)</h2>
+            <p>Phân hệ lưu trữ toàn bộ các tiến trình thay đổi thời hạn sử dụng của các mã khóa bản quyền phần mềm, phục vụ mục đích kiểm tra minh bạch thời gian sử dụng dịch vụ và thu phí định kỳ của Khách hàng.</p>
+            
+            <img src="images/guide/5.1.png" alt="Giao diện Lịch Sử Cấp Bản Quyền" class="doc-img" />
+
+            <h3>Giải nghĩa chi tiết các thông tin hiển thị trên bảng đối soát:</h3>
+            <div class="param-grid">
+                <div class="param-card">
+                    <strong>Số TK MT5 & Khách hàng</strong>
+                    - <code>Số TK MT5</code>: Số hiệu tài khoản giao dịch áp dụng thay đổi thời hạn bản quyền.<br>
+                    - <code>Khách hàng</code>: Tên đầy đủ của Khách hàng sở hữu tài khoản chạy Robot.
+                </div>
+                <div class="param-card">
+                    <strong>Mã License Key & Hành động</strong>
+                    - <code>Mã License Key</code>: Chuỗi khóa bảo mật được áp dụng tại thời điểm ghi nhận.<br>
+                    - <code>Hành động</code>: Phân loại nghiệp vụ bao gồm <strong>Cấp mới lần đầu</strong> (Khi khởi tạo tài khoản) hoặc <strong>Gia hạn License</strong> (Khi hoàn tất đóng phí chu kỳ tiếp theo).
+                </div>
+                <div class="param-card">
+                    <strong>Hạn cũ trước xử lý & Hạn mới kích hoạt</strong>
+                    - <code>Hạn cũ trước xử lý</code>: Ngày hết hạn cũ của tài khoản trước khi thực hiện điều chỉnh. Nếu là tài khoản mới, trường này sẽ hiển thị dấu gạch ngang.<br>
+                    - <code>Hạn mới kích hoạt</code>: Thời hạn hết hạn mới sau khi đã kích hoạt gia hạn thành công (Hiển thị bằng màu sắc nổi bật để dễ kiểm tra).
+                </div>
+                <div class="param-card">
+                    <strong>Ghi chú lý do gia hạn & Ngày xử lý</strong>
+                    - <code>Ghi chú lý do gia hạn</code>: Nội dung ghi chú thông tin thu phí bản quyền hoặc lý do điều chỉnh gia hạn đặc biệt từ tổng đài viên.<br>
+                    - <code>Ngày xử lý</code>: Ngày giờ thực tế hệ thống thực hiện cập nhật dữ liệu thành công.
+                </div>
+            </div>
+
+            <h3>Hệ thống các bộ lọc tra cứu thông tin nhanh:</h3>
+            <p>Khách hàng sử dụng hàng công cụ tìm kiếm ngay tại đầu bảng để nhanh chóng truy xuất dữ liệu mong muốn:</p>
+            <ul>
+                <li><strong>Lọc TK MT5:</strong> Nhập số tài khoản cụ thể để kiểm tra toàn bộ lịch sử nạp phí và thời hạn của tài khoản đó.</li>
+                <li><strong>Tìm tên khách:</strong> Tra cứu nhanh lịch sử bản quyền theo tên chủ sở hữu.</li>
+                <li><strong>Lọc Key:</strong> Nhập chuỗi khóa bảo mật để tìm kiếm tài khoản giao dịch tương ứng.</li>
+                <li><strong>Menu Hành động:</strong> Ô tùy chọn lọc riêng biệt danh sách theo tác vụ <code>Cấp mới</code> hoặc <code>Gia hạn</code> để tiện đối soát số liệu kế toán.</li>
+            </ul>
+        </section>
+
+        <section id="system-log" class="doc-section">
+            <h2><i class="fa fa-shield"></i> 6. Nhật Ký Bảo Mật Hệ Thống (System Security Log)</h2>
+            <p>Phân hệ Nhật ký Bảo mật đóng vai trò là hệ thống giám sát và lưu vết tự động mọi hành vi tương tác dữ liệu trên nền tảng. Tính năng này ghi lại chính xác mọi thao tác thay đổi tham số chiến lược, giúp bảo vệ quyền lợi, tăng tính minh bạch và triệt tiêu hoàn toàn rủi ro tranh chấp thông số trong quá trình vận hành giữa Khách hàng và nhân viên hỗ trợ.</p>
+            
+            <img src="images/guide/6.1.png" alt="Giao diện Nhật Ký Bảo Mật Log" class="doc-img" />
+
+            <h3>Giải nghĩa các trường dữ liệu kiểm toán trên bảng:</h3>
+            <div class="param-grid">
+                <div class="param-card">
+                    <strong>Người thao tác</strong>
+                    Hiển thị thông tin định danh và họ tên đầy đủ của nhân sự hỗ trợ hoặc tài khoản trực tiếp thực hiện hành vi thay đổi dữ liệu để bảo đảm tính rõ ràng, quy trách nhiệm.
+                </div>
+                <div class="param-card">
+                    <strong>Hành động & Bảng tác động</strong>
+                    - <code>Hành động</code>: Loại thao tác biến động dữ liệu bao gồm <strong>INSERT</strong> (Tạo mới hồ sơ tài khoản) hoặc <strong>UPDATE</strong> (Thay đổi tham số cấu hình lưới, thay đổi thời hạn bản quyền hoặc tắt/bật Robot từ xa).<br>
+                    - <code>Bảng tác động</code>: Phân hệ dữ liệu chịu sự thay đổi trực tiếp trên hệ thống.
+                </div>
+                <div class="param-card">
+                    <strong>ID dòng & Nội dung chi tiết thay đổi</strong>
+                    - <code>ID dòng</code>: Mã số định danh của dòng thông tin trong hệ thống chịu sự tác động.<br>
+                    - <code>Nội dung chi tiết thay đổi</code>: Bảng lưu vết liệt kê chi tiết toàn bộ danh sách các giá trị tham số giao dịch, Lot và bước giá trước và sau khi thực hiện thay đổi để Khách hàng đối soát khi cần thiết.
+                </div>
+                <div class="param-card">
+                    <strong>Địa chỉ IP & Thời gian tạo</strong>
+                    - <code>Địa chỉ IP</code>: Địa chỉ mạng Internet thực tế của thiết bị thực hiện thao tác sửa đổi dữ liệu.<br>
+                    - <code>Thời gian tạo</code>: Mốc ngày giờ chính xác đến từng giây ghi nhận hành động lưu cấu hình thành công.
+                </div>
+            </div>
+
+            <div class="note-block">
+                <i class="fa fa-info-circle"></i> <strong>Ứng dụng đối soát thực tế:</strong> Trong trường hợp Robot hoạt động không đúng kỳ vọng do thông số bị điều chỉnh sai, Khách hàng hoàn toàn có thể vào màn hình này để truy vết ngược lại xem: Ai là người thực hiện, đã thay đổi thông số Lot hoặc bước giá nào, vào thời điểm nào để làm cơ sở xử lý sự cố chuẩn xác.
+            </div>
+        </section>
+        
+        <section id="client-dashboard" class="doc-section">
+            <h2><i class="fa fa-desktop"></i> 7. Cổng Giám Sát Dành Cho Khách Hàng (Client Dashboard)</h2>
+            <p>Cổng thông tin Khách hàng (Client Portal) cung cấp giao diện theo dõi độc lập, bảo mật và tối ưu hóa hiển thị dành riêng cho người dùng cuối thuê Robot. Khách hàng có thể truy cập trực tiếp thông qua đường dẫn chính thức: <a href="https://hethongso.com/itrade/index.php/do_login_client" target="_blank" style="color: #1abb9c; font-weight: bold; text-decoration: underline;">https://hethongso.com/itrade/index.php/do_login_client</a>. Tại đây, Khách hàng có quyền giám sát toàn bộ các chỉ số tài chính, theo dõi tham số chiến lược và sử dụng nút bấm ngắt lệnh khẩn cấp trực tuyến.</p>
+            
+            <img src="images/guide/7.1.png" alt="Giao diện Bảng Điều Khiển Khách Hàng" class="doc-img" />
+
+            <h3>A. Thanh tiêu đề & Thông tin định danh:</h3>
+            <p>Nằm trên cùng của trang Portal, hiển thị chính xác trạng thái phiên làm việc hiện tại của tài khoản:</p>
+            <ul>
+                <li><strong>Lời chào User:</strong> Hệ thống hiển thị họ tên của Khách hàng dựa trên tài khoản đăng nhập (Ví dụ: <code>Xin chào, Nguyễn Văn A</code>) để xác định đúng tài khoản sở hữu.</li>
+                <li><strong>Nút Đăng xuất:</strong> Cho phép Khách hàng chủ động thoát tài khoản và xóa sạch các dữ liệu lưu vết của phiên làm việc để bảo mật thông tin trên thiết bị.</li>
+            </ul>
+
+            <h3>B. Khối hộp điều khiển ngắt Robot khẩn cấp (Kill Switch):</h3>
+            <p>Khối chức năng có màu nền nổi bật ở đầu giao diện. Đây là công cụ can thiệp trực tuyến duy nhất mà Khách hàng được quyền thao tác để tác động trực tiếp lên hệ thống vận hành từ xa của Robot:</p>
+            <ul>
+                <li><strong>Trạng thái chạy lệnh:</strong> Khách hàng nhấp chọn chuyển đổi linh hoạt giữa <code>1: Khởi chạy từ xa (Robot được quyền mở lệnh)</code> hoặc <code>0: Tạm ngừng từ xa (Robot lập tức chặn vào lệnh)</code>.</li>
+                <li><strong>Nút "Cập nhật trạng thái":</strong> Khi Khách hàng bấm nút này, cấu hình dừng lệnh sẽ được gửi đi ngay lập tức. Trong vòng tối đa 60 giây, Robot đang chạy tại máy chủ từ xa sẽ nhận tín hiệu và tự động đóng băng toàn bộ hành vi nhồi thêm lệnh mới nhằm bảo vệ dòng vốn trước các thời điểm thị trường bão táp hoặc có tin tức cực mạnh.</li>
+            </ul>
+
+            <h3>C. Các phân khu tham số chiến lược (Chế độ Xem - Read-only):</h3>
+            <p>Toàn bộ các thông số quản lý vốn, khối lượng Lot giao dịch, bước giá ma trận lưới từ Phần I đến Phần IV trên giao diện này đều ở trạng thái **Khóa hiển thị cố định (Màu nền xám)**. Khách hàng có quyền xem trực quan để đối soát tính minh bạch của thuật toán, nhưng không thể tự ý chỉnh sửa nhằm bảo đảm tính ổn định tuyệt đối của hệ thống vận hành và tránh các rủi ro thao tác sai quy trình làm hỏng chu kỳ lệnh.</p>
+        </section>
+        
+        <section id="mt5-setup" class="doc-section">
+            <h2><i class="fa fa-gears"></i> 8. Hướng Dẫn Cài Đặt & Kích Hoạt Hệ Thống Bot Trên MT5</h2>
+            <p>Để hệ thống Robot Giao dịch (EA) hoạt động trên nền tảng MetaTrader 5 kết nối mượt mà với trung tâm quản lý đám mây EA HUB, Khách hàng thực hiện đầy đủ quy trình thiết lập gồm 4 bước đơn giản dưới đây. Việc cài đặt chính xác sẽ giúp Robot luôn duy trì trạng thái cập nhật chỉ số và giao dịch ổn định.</p>
+
+            <div class="note-block" style="background-color: #fdf2f2; border-left: 4px solid #d9534f; margin: 20px 0; padding: 18px;">
+                <i class="fa fa-exclamation-triangle" style="color: #d9534f; font-size: 18px; margin-right: 8px;"></i> 
+                <strong style="color: #b91c1c; font-size: 14px; text-transform: uppercase; letter-spacing: 0.5px;">CẢNH BÁO BẢO VỆ VỐN TỐI CAO (CRITICAL RISK WARNING):</strong>
+                <p style="margin-top: 8px; font-size: 13px; font-weight: 600; color: #7f1d1d; line-height: 1.6;">
+                    TRƯỚC KHI ĐƯA HỆ THỐNG VÀO VẬN HÀNH VÀ SỬ DỤNG CHÍNH THỨC TRÊN TÀI KHOẢN TIỀN THẬT (LIVE ACCOUNT STANDARD), KHÁCH HÀNG BẮT BUỘC PHẢI KHỞI CHẠY BOT TRÊN TÀI KHOẢN THỬ NGHIỆM (DEMO ACCOUNT) HOẶC TÀI KHOẢN PHÂN NHỎ (CENT ACCOUNT) TRONG THỜI GIAN ÍT NHẤT TỪ 1 ĐẾN 2 TUẦN.
+                </p>
+                <p style="margin-top: 6px; font-size: 13px; color: #991b1b; font-style: italic;">
+                    * Lý do: Việc này giúp đảm bảo tính đồng bộ thông số lưới lệnh, kiểm tra tốc độ phản hồi kết nối từ xa từ máy chủ ảo về hệ thống Web và kiểm soát hành vi đi lệnh của thuật toán trong môi trường thực tế mà không gây nguy hiểm hay tổn thất cho nguồn vốn lớn của khách hàng. Khách hàng chỉ được chuyển đổi sang tài khoản Live khi hệ thống giám sát đã xác nhận cấu hình lưới hoạt động ổn định, khớp 100% mục tiêu quản lý vốn.
+                </p>
+            </div>
+
+            <h3>Bước 8.1: Tải bộ cài đặt Robot từ hệ thống</h3>
+            <p>Khách hàng truy cập tải trực tiếp file cài đặt chính thức của hệ thống theo liên kết dưới đây:</p>
+            <div style="margin: 15px 0; display: flex; gap: 15px; flex-wrap: wrap;">
+                <a href="https://hethongso.com/itrade/download/BOT_V33.ex5?v=1.0.2" download="BOT_V33.ex5" class="btn btn-sm" style="background-color: #1abb9c; color: white; padding: 10px 15px; border-radius: 4px; font-weight: bold; text-decoration: none; display: inline-flex; align-items: center; gap: 8px;">
+                    <i class="fa fa-download"></i> Tải Robot Giao Dịch: BOT_V33.ex5
+                </a>
+            </div>
+
+            <h3>Bước 8.2: Cài đặt Robot vào phần mềm MT5</h3>
+            <p>Để đảm bảo Robot được cài đặt chính xác vào đúng tài khoản và sàn giao dịch bạn đang vận hành, hãy thực hiện theo quy trình 3 bước sau:</p>
+            <ol style="line-height: 1.8; padding-left: 20px;">
+                <li>Trên phần mềm MT5 bạn muốn chạy Bot, nhấn vào menu <strong>File</strong> ở góc trái trên cùng &rarr; Chọn dòng <strong>Open Data Folder</strong> (Mở thư mục dữ liệu).</li>
+                <li>Cửa sổ thư mục máy tính xuất hiện, bạn truy cập lần lượt vào: <strong>MQL5</strong> &rarr; <strong>Experts</strong> &rarr; <strong>Advisors</strong>.</li>
+                <li>Bạn tiến hành sao chép (Copy) file <code>BOT_v33.ex5</code> đã tải ở Bước 8.1 và dán thẳng (Paste) vào thư mục <strong>Advisors</strong> này là hoàn tất.</li>
+            </ol>
+            <p style="margin-top: 10px; font-style: italic; color: #73879c; font-size: 13px;">
+                * Sau khi dán xong, bạn quay lại giao diện MT5, click chuột phải vào mục <strong>Expert Advisors</strong> tại cửa sổ Navigator chọn <strong>Refresh</strong> để Robot hiển thị lên màn hình.
+            </p>
+
+            <h3>Bước 8.3: Cấp quyền kết nối dữ liệu ngoại vi (WebRequest URL Authorization)</h3>
+            <p>Mặc định, phần mềm MetaTrader 5 sẽ chặn các kết nối mạng ra bên ngoài để bảo vệ an toàn bảo mật. Khách hàng cần mở khóa quyền truy cập Internet cho cổng máy chủ hệ thống theo đúng quy trình sau:</p>
+            
+            <img src="images/guide/8.1.png" alt="Cấu hình WebRequest trên MT5 Options" class="doc-img" />
+            <div class="screenshot-caption" style="text-align: center; margin-bottom: 20px; font-style: italic; font-size: 13px; color: #73879c;"><i class="fa fa-camera"></i> Hình 8.1: Giao diện cấu hình cấp quyền WebRequest bảo mật trên phần mềm MetaTrader 5</div>
+
+            <ol>
+                <li>Trên thanh menu của MT5, chọn <strong>Tools (Công cụ)</strong> &rarr; chọn <strong>Options (Tùy chọn)</strong> [Hoặc sử dụng tổ hợp phím tắt nhanh <code>Ctrl + O</code>].</li>
+                <li>Khi hộp thoại Options xuất hiện, nhấp chuột chuyển sang tab <strong>Expert Advisors (Cố vấn thương mại)</strong>.</li>
+                <li>Tích chọn vào ô vuông: <strong>"Allow WebRequest for listed URL"</strong> (Cho phép yêu cầu Web cho các URL liệt kê dưới đây).</li>
+                <li>Nhấp đúp chuột vào biểu tượng dấu cộng màu xanh, nhập chính xác đường dẫn cổng kết nối hệ thống: <code>https://hethongso.com/itrade</code> rồi nhấn <strong>OK</strong> để lưu lại.</li>
+            </ol>
+            <div class="note-block">
+                <i class="fa fa-info-circle"></i> <strong>Lý do bắt buộc:</strong> Tính năng liên kết Cloud trong Robot cần quyền truy cập Internet để cập nhật liên tục các thông số số dư tài sản (Balance, Equity, Drawdown) lên trung tâm điều khiển trực tuyến và đồng bộ cấu hình chiến lược mới về máy trạm. Nếu không phê duyệt URL này, phần mềm sẽ ngắt kết nối, Robot không thể xác thực quyền hạn sử dụng bản quyền và sẽ tự động dừng hoạt động để phòng vệ.
+            </div>
+
+            <h3>Bước 8.4: Nhập License Key và Kích hoạt quyền tự động giao dịch cho Robot</h3>
+            <p>Thực hiện thao tác kéo file Robot <code>BOT_v33</code> từ cửa sổ Navigator thả trực tiếp vào đồ thị sản phẩm giao dịch mong muốn (Ví dụ: Đồ thị Vàng <code>XAUUSD,M1</code>). Bảng thông số thiết lập sẽ xuất hiện cấu hình như sau:</p>
+
+            <img src="images/guide/8.2.png" alt="Kích hoạt Allow Algo Trading và nhập Key cho Bot" class="doc-img" />
+            <div class="screenshot-caption" style="text-align: center; margin-bottom: 20px; font-style: italic; font-size: 13px; color: #73879c;"><i class="fa fa-camera"></i> Hình 8.2: Bảng nhập License Key</div>
+
+            <ol>
+                <li>Tại bảng thông số, chuyển sang tab <strong>Inputs (Tham số đầu vào)</strong>. Tìm tới dòng <code>Nhập mã License Key từ Admin cấp</code>, hãy tiến hành nhập chính xác chuỗi khóa bảo mật được cấp từ hệ thống quản lý vào ô giá trị (Ví dụ: <code>4036A905XXXXXXXX</code>).</li>
+                <li>Nhấp chuột chuyển sang tab <strong>Common (Cài đặt chung)</strong> ở góc trên bên trái và tích chọn vào ô vuông: <strong>"Allow Algo Trading"</strong> (Cho phép giao dịch thuật toán) để cấp quyền vào lệnh. Nhấp nút <strong>OK</strong> để Robot bám vào đồ thị sản phẩm.</li>
+                <li>Cuối cùng, hãy kiểm tra nút bấm biểu tượng <strong>Algo Trading</strong> trên thanh công cụ tổng phía trên cùng của phần mềm MT5. Đảm bảo nút này đang ở trạng thái kích hoạt **Màu xanh** (Biểu tượng tam giác Play màu xanh). Nếu nút này hiển thị màu đỏ, hệ thống phần mềm đang khóa giao dịch toàn cục, Robot sẽ bị chặn không thể gửi lệnh lên sàn.</li>
+            </ol>
+            
+            <img src="images/guide/8.3.png" alt="Kích hoạt Allow Algo Trading và nhập Key cho Bot" class="doc-img" />
+            <div class="screenshot-caption" style="text-align: center; margin-bottom: 20px; font-style: italic; font-size: 13px; color: #73879c;"><i class="fa fa-camera"></i> Hình 8.3: Bảng xác nhận cấp quyền tự động vào lệnh trực tiếp</div>
+            
+            <div class="note-block" style="background-color: #fef2f2; border-left: 4px solid #ef4444;">
+                <i class="fa fa-exclamation-triangle" style="color: #ef4444;"></i> <strong>Lý do bắt buộc:</strong> Đây là công tắc bảo vệ an toàn cuối cùng trên phần mềm máy trạm. Việc tích chọn các ô quyền hạn này cho phép Robot thực hiện các nghiệp vụ đóng/mở vị thế giao dịch tự động hoàn toàn trên tài khoản. Nếu không kích hoạt bật nút màu xanh này, phần mềm chỉ chạy các tác vụ đọc thông số phân tích thị trường ngầm chứ hoàn toàn không thể thực thi các thao tác giao dịch thực tế trên tài khoản tiền của Khách hàng.
+            </div>
+
+            <div class="note-block" style="background-color: #f0fdf4; border-left: 4px solid #16a34a; margin-top: 30px;">
+                <i class="fa fa-server" style="color: #16a34a; margin-right: 5px;"></i> <strong>ĐIỀU KIỆN DUY TRÌ HOẠT ĐỘNG LIÊN TỤC (CRITICAL NOTE):</strong>
+                <p style="margin-top: 10px; font-size: 13px; font-weight: 500; color: #14532d;">Để Robot có thể rà soát liên tục tín hiệu thị trường, quét chu kỳ đóng lệnh và quản lý lưới lệnh chính xác 24/7 theo thời gian thực, phần mềm MT5 chứa Robot bắt buộc phải được duy trì trạng thái chạy liên tục và có kết nối mạng Internet ổn định, không ngắt quãng. Khách hàng lựa chọn 1 trong 2 giải pháp hạ tầng vận hành:</p>
+                <ul style="margin-top: 8px; padding-left: 20px; color: #14532d; font-size: 13px; line-height: 1.8;">
+                    <li><strong>Giải pháp 1 (Sử dụng máy tính cá nhân):</strong> Máy tính cá nhân (PC/Laptop) của Khách hàng phải bật liên tục, không được tắt nguồn, không được để máy rơi vào trạng thái ngủ tạm thời (Sleep/Hibernate) và không được mất kết nối Internet. Nếu máy tính cá nhân bị tắt, Robot sẽ hoàn toàn ngắt kết nối và không thể xử lý giỏ lệnh đang chạy trên thị trường, dễ dẫn đến rủi ro sụt giảm tài sản lớn nếu thị trường có biến động mạnh.</li>
+                    <li><strong>Giải pháp 2 (Thuê máy chủ đám mây Cloud VPS - Khuyên dùng):</strong> Khách hàng nên chủ động chạy phần mềm MT5 và cài đặt Robot cố định trên hệ thống <strong>Máy chủ ảo Cloud VPS (Virtual Private Server)</strong> sử dụng hệ điều hành Windows. VPS là hạ tầng công nghệ chuyên dụng chạy liên tục 365 ngày không bao giờ tắt, sở hữu đường truyền mạng tốc độ cao và nguồn điện dự phòng tiêu chuẩn, giúp đảm bảo an toàn tối đa cho quỹ tài khoản, tối ưu hóa tốc độ xử lý vị thế và giúp Khách hàng không cần phải treo máy tính cá nhân tại nhà.</li>
+                </ul>
+            </div>
+        </section>
+        
+        <section id="bot-lifecycle" class="doc-section">
+            <h2><i class="fa fa-refresh"></i> 9. Phân Tích Vòng Đời Đi Lệnh Tự Động (Order Lifecycle)</h2>
+            <p>Hệ thống Robot Giao dịch vận hành theo một guồng quay logic khép kín, tự động hóa toàn bộ từ khâu dò tìm tín hiệu cho đến khi tất toán sạch giỏ lệnh mang lợi nhuận về tài khoản. Vòng đời của một chuỗi lưới lệnh trải qua 3 giai đoạn cốt lõi với sự liên kết chặt chẽ của các tham số thiết lập trên Web HUB:</p>
+            <img src="images/guide/9.1.png" alt="Bảng cài đặt thiết lập các thông số cho Bot" class="doc-img" />
+            <div class="screenshot-caption" style="text-align: center; margin-bottom: 20px; font-style: italic; font-size: 13px; color: #73879c;"><i class="fa fa-camera"></i> Hình 9.1: Bảng cài đặt thiết lập các thông số cho Bot</div>
+            
+            <h3>Giai đoạn 9.1: Khởi tạo vị thế đầu tiên (Mở lệnh gốc L1)</h3>
+            <p>Khi tài khoản ở trạng thái trống lệnh, Robot sẽ đứng ở trạng thái chờ và liên tục quét điều kiện thị trường dựa trên hai lớp bộ lọc bảo vệ:</p>
+            <ul>
+                <li><strong>Lớp lọc thời gian (Khung giờ giao dịch):</strong> Nếu tính năng <code>Sử dụng bộ lọc giờ</code> được kích hoạt, Robot đối chiếu thời gian thị trường để bảo đảm nằm trong khoảng từ <code>Giờ bắt đầu</code> đến <code>Giờ kết thúc</code> mới bắt đầu tìm tín hiệu. Nếu nằm ngoài khung giờ này, phần mềm tự động dừng quét để tránh các thời điểm thị trường có biên độ biến động rủi ro cao hoặc thiếu thanh khoản.</li>
+                <li><strong>Lớp lọc xu hướng (Chỉ báo kỹ thuật RSI):</strong> Robot dựa vào các thông số cài đặt <code>RSI Period</code> và khung thời gian đồ thị <code>RSI TF</code> để tính toán vùng giá quá mua hoặc quá bán tức thời của thị trường.
+                    <br>&bull; <em>Vị thế BUY (Mua) L1:</em> Tự động kích hoạt khi chỉ báo RSI rớt xuống vùng giá Quá bán trên đồ thị &rarr; Hệ thống xác định thị trường có xu hướng hồi phục đi lên.
+                    <br>&bull; <em>Vị thế SELL (Bán) L1:</em> Tự động kích hoạt khi chỉ báo RSI vượt lên vùng giá Quá mua trên đồ thị &rarr; Hệ thống xác định thị trường có xu hướng đảo chiều đi xuống.
+                </li>
+                <li><strong>Khối lượng vị thế gốc:</strong> Lệnh đầu tiên L1 luôn được mở chính xác với khối lượng Lot đã được Khách hàng thiết lập tại mục <code>Initial Lot</code> trên bảng điều khiển Web.</li>
+            </ul>
+
+            <h3>Giai đoạn 9.2: Triển khai ma trận lưới phòng thủ (Mở các vị thế bảo vệ kế tiếp)</h3>
+            <p>Sau khi lệnh đầu tiên L1 được mở, nếu thị trường bất ngờ xảy ra biến động lớn và đi ngược hướng kỳ vọng, <strong>Robot sẽ tạm thời bỏ qua chỉ báo xu hướng RSI</strong>. Lúc này, cơ chế quản lý vốn thông minh và ma trận lưới khoảng cách sẽ chính thức tiếp quản tài khoản để tìm điểm hòa vốn an toàn:</p>
+            
+            <ol>
+                <li><strong>Khoảng cách lưới lệnh động (Ma trận Pips):</strong> Robot liên tục đo lường khoảng cách dịch chuyển ngược hướng của đường giá dựa trên bảng thông số từ <code>G1 đến G25</code>. Khoảng cách dãn rộng dần theo thiết lập (G1=10 pips, G2=20 pips, G3=30 pips...) giúp lưới lệnh được trải rộng tối đa, giữ tài khoản ở trạng thái an toàn, không bị nhồi lệnh quá dày khi thị trường rơi vào bão giá.</li>
+                <li><strong>Khối lượng giao dịch lũy tiến:</strong> Khối lượng của vị thế lệnh sau sẽ bằng khối lượng lệnh ngay trước đó nhân với hệ số tại mục <code>Lot Multi</code> (Ví dụ: L1 = 0.1 Lot &rarr; L2 = 0.15 Lot &rarr; L3 = 0.22 Lot...) nhằm tối ưu hóa và kéo điểm hòa vốn tổng của giỏ lệnh về gần sát với giá thị trường nhất. Chuỗi lệnh nhồi bảo vệ sẽ dừng lại hoàn toàn khi đạt tới ngưỡng cấu hình tại ô <code>Max Orders</code> để bảo đảm kiểm soát rủi ro tuyệt đối cho nguồn vốn.</li>
+                <li><strong>Cơ chế xác nhận kép (Chống bão giá):</strong> Khi chuỗi lệnh kéo sâu đạt tới ngưỡng <code>Xác nhận kép từ lệnh thứ N</code>, hệ thống phòng ngự nâng cao sẽ tự động kích hoạt. Robot sẽ không vào lệnh tự động dựa theo khoảng cách Pips thuần túy nữa, mà bắt buộc phải đợi đường giá thị trường hoàn tất chu kỳ kiểm tra dao động tối thiểu hai lần tại vùng giá mục tiêu, tránh việc nhồi lệnh liên tục ngay giữa một cây nến bão đang đâm mạnh một chiều.</li>
+            </ol>
+
+            <h3>Giai đoạn 9.3: Tất toán và Thu hồi dòng vốn (Take Profit / Cắt tỉa cặp lệnh)</h3>
+            <p>Mục tiêu cuối cùng của Robot là đóng toàn bộ giỏ lệnh ở trạng thái có lợi nhuận tổng dương hoặc an toàn nhất cho Khách hàng thông qua 2 cơ chế đóng lệnh linh hoạt:</p>
+            <ul>
+                <li><strong>Cơ chế chốt lời tổng giỏ lệnh (Take Profit Mode):</strong> 
+                    <br>&bull; <em>Nếu chọn chế độ chốt lời theo Điểm giá (`0: Theo Pip`):</em> Phần mềm dựa vào thông số <code>TP Pips</code> để tính toán điểm chốt lời tổng động. Mỗi khi lưới mở thêm lệnh có khối lượng lớn ở vùng giá có lợi hơn, điểm hòa vốn và điểm chốt lời tổng này tự động được kéo về sát với giá hiện tại. Thị trường chỉ cần hồi nhẹ chạm tới điểm này, toàn bộ giỏ lệnh sẽ đóng sạch, mang về biên lợi nhuận đúng mục tiêu.
+                    <br>&bull; <em>Nếu chọn chế độ chốt lời theo Tiền mặt (`1: Theo USD ($)`):</em> Robot tính toán tổng trạng thái lợi nhuận của toàn bộ giỏ lệnh bằng Đô-la, chạm đúng mốc số tiền cấu hình tại ô <code>TP USD ($)</code> sẽ kích hoạt lệnh tự động tất toán sạch tài khoản.
+                </li>
+                <li><strong>Cơ chế cắt tỉa vị thế giảm tải (Chốt cặp nâng cao):</strong> Khi tính năng <code>Bật chức năng chốt cặp</code> hoạt động và giỏ lệnh đạt đến ngưỡng cài đặt từ tầng quy định:
+                    <br>&bull; <em>Trường hợp KHÔNG chọn "Chốt dần về":</em> Robot thực hiện lấy vị thế lệnh có mức âm sâu nhất (L1) bắt cặp tất toán chung với các vị thế lệnh có mức lãi đậm nhất ở đáy lưới (L9, L10...) khi tổng tiền lời trạng thái của hai vị thế này đạt mức tiền dương cài đặt tại ô <code>Lợi nhuận cặp ($)</code>. Cơ chế này giúp thu hẹp biên độ lưới và giải phóng tiền ký quỹ cho tài khoản nhanh nhất.
+                    <br>&bull; <em>Trường hợp CÓ chọn "Chốt dần về":</em> Robot đảo ngược logic, thực hiện bắt cặp và chốt lời cuốn chiếu từ dưới lên (L9 bắt cặp với L8, L10 bắt cặp với L7...). Tính năng này giúp giải phóng sớm các lệnh có khối lượng Lot lớn ở vùng bão giá, thu hẹp quy mô tổng của lưới dần về phía các lệnh gốc ban đầu để bảo vệ tài khoản dài hạn.
+                </li>
+            </ul>
+        </section>
+</main>
+
+    <script>
+        // JS xử lý Active Menu khi cuộn trang
+        window.addEventListener('DOMContentLoaded', () => {
+            const observer = new IntersectionObserver(entries => {
+                entries.forEach(entry => {
+                    const id = entry.target.getAttribute('id');
+                    if (entry.intersectionRatio > 0) {
+                        document.querySelector(`.sidebar-menu a[href="#${id}"]`).classList.add('active');
+                    } else {
+                        document.querySelector(`.sidebar-menu a[href="#${id}"]`).classList.remove('active');
+                    }
+                });
+            });
+            document.querySelectorAll('.doc-section').forEach((section) => {
+                observer.observe(section);
+            });
+        });
+    </script>
+</body>
+</html>

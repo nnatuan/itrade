@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EA HUB - Connecting to Cloud Control Center...</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: #0b111e;
+            font-family: 'Inter', sans-serif;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            color: #ffffff;
+        }
+
+        /* Khung chứa hiệu ứng trung tâm */
+        .loading-container {
+            text-align: center;
+            position: relative;
+        }
+
+        /* 1. Hiệu ứng Vòng quét Radar Công nghệ */
+        .radar-spinner {
+            width: 180px;
+            height: 180px;
+            border-radius: 50%;
+            margin: 0 auto 30px auto;
+            position: relative;
+            border: 2px solid rgba(26, 187, 156, 0.1);
+            box-shadow: 0 0 20px rgba(26, 187, 156, 0.05);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* Vòng tròn quét động bên ngoài */
+        .radar-spinner::before {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            border: 3px solid transparent;
+            border-top-color: #1abb9c;
+            border-bottom-color: #1abb9c;
+            animation: rotateRadar 2s linear infinite;
+        }
+
+        /* Vòng tròn đệm xung mạch bên trong */
+        .radar-spinner::after {
+            content: '';
+            position: absolute;
+            width: 80%;
+            height: 80%;
+            border-radius: 50%;
+            border: 2px dashed rgba(52, 152, 219, 0.4);
+            animation: rotateRadarReverse 4s linear infinite;
+        }
+
+        /* Biểu tượng lõi phát sáng */
+        .core-icon {
+            font-size: 45px;
+            color: #1abb9c;
+            animation: pulseCore 1.5s ease-in-out infinite alternate;
+            text-shadow: 0 0 15px rgba(26, 187, 156, 0.6);
+            z-index: 10;
+        }
+
+        /* 2. Phần chữ Hiển thị & Tiến trình */
+        .brand-title {
+            font-size: 24px;
+            font-weight: 800;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            margin-bottom: 8px;
+            color: #ffffff;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+        }
+
+        .brand-title span {
+            color: #1abb9c;
+        }
+
+        .status-text {
+            font-size: 13px;
+            color: #73879c;
+            font-weight: 500;
+            letter-spacing: 1px;
+            height: 20px;
+            margin-bottom: 15px;
+        }
+
+        /* Con số % chạy độc lập */
+        .percentage-counter {
+            font-size: 16px;
+            font-weight: 600;
+            color: #3498db;
+            font-family: monospace;
+        }
+
+        /* Keyframes Animations */
+        @keyframes rotateRadar {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        @keyframes rotateRadarReverse {
+            0% { transform: rotate(360deg); }
+            100% { transform: rotate(0deg); }
+        }
+
+        @keyframes pulseCore {
+            0% { transform: scale(0.9); opacity: 0.7; }
+            100% { transform: scale(1.1); opacity: 1; text-shadow: 0 0 25px rgba(26, 187, 156, 0.9); }
+        }
+
+        /* Hiệu ứng mờ dần toàn trang khi kết thúc chuyển màn */
+        .fade-out-page {
+            opacity: 0;
+            transition: opacity 0.5s ease-out;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="loading-container" id="splashContainer">
+        <div class="radar-spinner">
+            <i class="fa fa-cubes core-icon"></i>
+        </div>
+
+        <div class="brand-title">EA <span>HUB</span></div>
+        
+        <div class="status-text" id="statusMessage">INITIALIZING CONNECTION...</div>
+        
+        <div class="percentage-counter"><span id="percentNum">0</span>%</div>
+    </div>
+
+    <script>
+        // Danh sách log chạy ngầu ngầu khớp với hệ thống giao dịch của anh
+        const bootLogs = [
+            "CONNECTING TO API CLOUD TERMINAL...",
+            "AUTHENTICATING LICENSE KEY...",
+            "DOWNLOADING EA GRID MATRIX...",
+            "SYNCHRONIZING CAPITAL BUFFER...",
+            "ESTABLISHING SECURE GATEWAY...",
+            "ACCESS GRANTED! REDIRECTING..."
+        ];
+
+        let currentPercent = 0;
+        const percentElement = document.getElementById("percentNum");
+        const statusElement = document.getElementById("statusMessage");
+        const splashContainer = document.getElementById("splashContainer");
+
+        // Địa chỉ trang đăng nhập Client đích danh của anh
+        const targetLoginUrl = "https://hethongso.com/itrade/index.php/do_login";
+
+        // Hàm chạy bộ đếm số và tiến trình chữ
+        const loadingInterval = setInterval(() => {
+            currentPercent += Math.floor(Math.random() * 4) + 1; // Nhảy số ngẫu nhiên cho thật
+            
+            if (currentPercent >= 100) {
+                currentPercent = 100;
+                percentElement.innerText = currentPercent;
+                statusElement.innerText = bootLogs[bootLogs.length - 1];
+                statusElement.style.color = "#1abb9c";
+                clearInterval(loadingInterval);
+                
+                // Kích hoạt hiệu ứng biến mất mượt mà trước khi nhảy trang
+                setTimeout(() => {
+                    document.body.classList.add("fade-out-page");
+                    setTimeout(() => {
+                        window.location.href = targetLoginUrl;
+                    }, 400);
+                }, 300);
+                return;
+            }
+
+            // Cập nhật số phần trăm hiển thị
+            percentElement.innerText = currentPercent;
+
+            // Thay đổi text feed theo tiến trình tương ứng cho chuyên nghiệp
+            if (currentPercent < 20) statusElement.innerText = bootLogs[0];
+            else if (currentPercent < 45) statusElement.innerText = bootLogs[1];
+            else if (currentPercent < 65) statusElement.innerText = bootLogs[2];
+            else if (currentPercent < 80) statusElement.innerText = bootLogs[3];
+            else if (currentPercent < 95) statusElement.innerText = bootLogs[4];
+
+        }, 40); // Thời gian chạy tổng cộng khoảng 2.5 - 3 giây là vừa đẹp, không quá lâu gây ức chế cho khách
+    </script>
+</body>
+</html>

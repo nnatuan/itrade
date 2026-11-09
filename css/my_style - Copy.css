@@ -1,0 +1,82 @@
+.cb:after {
+	clear: both;
+	content: '';
+    display: block;
+}
+.required {
+    color: red;
+}
+.page-title .title_left h3 {
+    opacity: 0;
+}
+.login_content h1 {
+    font-size: 50px;
+    letter-spacing: 10px;
+	margin: 10px 0 40px;
+}
+.login {
+    background: url(images/bg_login.jpg);
+    color: #fff;
+}
+.login_content form input[type="text"], .login_content form input[type="email"], .login_content form input[type="password"] {
+    box-shadow: none;
+}
+.x_title h2 {
+    text-transform: uppercase;
+}
+.nav_title {
+    height: 60px;
+}
+.table thead th {
+    text-align: center;
+}
+.table td, .table th {
+    vertical-align: middle;
+    text-align: center;	
+}
+.table thead tr th:first-child {width:100px !important;}
+tr.filter td {padding:5px;}
+tr.filter td .btn {margin:0 !important;width: 100%;height:38px;}
+.table-filter {margin-top:20px;padding-top:20px;}
+.table-filter .btn, .table-filter label {margin:0 !important;}
+.table-filter td {padding:0;padding-top:20px;}
+select#cbof_order_status, select#ctype {
+    width: 150px;
+    display: inline-block;
+}
+.group-filter {
+	display:inline-block;
+}
+.btn-filter {
+	margin-right: 0; 
+    float: right;
+    margin-left: 10px !important;
+}
+.top-filter {
+	padding-bottom: 15px;
+	text-align: right;
+	border-bottom: 1px solid #eee;
+}
+.top-filter .btn {margin:0;}
+code {
+    color: red;
+}
+td div.d-flex.align-items-center.justify-content-center, th div.d-flex.align-items-center.justify-content-center {
+	gap: 8px;
+}
+td div.d-flex.align-items-center.justify-content-center span:last-child, th div.d-flex.align-items-center.justify-content-center span:last-child {
+	margin-top: 2px;
+}
+.x_panel {
+	min-height:700px;
+}
+.nav>li>a {
+    padding: 10px 15px 12px;
+}
+.i-status {
+    font-size: 16px;
+}
+.btn-vtp {
+    background-color: #e8232b !important;
+    border-color: #e8232b !important;
+}

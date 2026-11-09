@@ -1,0 +1,198 @@
+/* ==========================================================================
+   QCARE HEALTH SYSTEM - CORE LISTVIEW STYLES (FULL CLEAN SEPARATION)
+   ========================================================================== */
+
+/* Khung panel chính */
+.qcare-panel-title {
+    font-weight: bold;
+    color: #0f766e;
+}
+
+/* Khối nút bấm thêm mới phía đầu bảng */
+.qcare-top-filter {
+    margin-bottom: 15px;
+}
+
+/* Hàng bộ lọc tìm kiếm (Filter Row) */
+.qcare-filter-row {
+    background-color: #fafafa !important;
+}
+
+/* Hộp nhập và hộp chọn trong hàng bộ lọc */
+.qcare-filter-row .form-control.input-sm {
+    height: 26px !important;
+    padding: 2px 8px !important;
+    font-size: 12px !important;
+    border-radius: 4px !important;
+}
+
+/* Nút "Lọc" nằm trong hàng bộ lọc */
+.qcare-btn-filter-submit {
+    margin: 0 !important;
+    padding: 2px 10px !important;
+}
+
+/* Cân bằng độ giãn dòng và padding của ô dữ liệu (td) trong bảng */
+.table-responsive table.jambo_table > tbody > tr > td {
+    padding: 8px 10px !important;
+    vertical-align: middle !important;
+}
+
+/* Nút Thao tác (Sửa/Xóa) nhỏ gọn, dẹt ôm sát icon fa */
+.qcare-btn-action {
+    margin: 0 2px !important;
+    padding: 2px 6px !important;
+    font-size: 11px !important;
+    line-height: 1.5 !important;
+    border-radius: 3px !important;
+    display: inline-block !important;
+}
+
+/* Bảng bọc khối phân trang ở cuối */
+.qcare-table-pagination {
+    margin-top: 15px;
+    margin-bottom: 0;
+}
+
+/* Các ô td chứa cấu trúc phân trang */
+.qcare-table-pagination tr > td {
+    vertical-align: middle !important;
+}
+
+/* Ô td căn phải chứa cụm nút và nhãn số trang */
+.qcare-pagination-block {
+    text-align: right;
+    width: 310px;
+}
+
+/* Nhãn text hiển thị số trang hiện tại (ví dụ: 1 / 5) */
+.qcare-page-indicator {
+    color: #2A3F54;
+    font-weight: bold;
+    padding: 0 4px;
+}
+
+/* Label text của ô nhập số dòng */
+.qcare-row-per-page-label {
+    font-weight: normal;
+    color: #73879C;
+}
+
+/* Ô nhập số trang và số dòng hiển thị */
+.qcare-page-input {
+    width: 60px !important;
+    height: 28px !important;
+    padding: 2px 4px !important;
+    font-weight: bold !important;
+    display: inline-block !important;
+    text-align: center !important;
+    border-radius: 4px !important;
+}
+
+/* Khống chế riêng cho ô nhập số trang hiện tại */
+.qcare-page-input.page-num {
+    width: 50px !important;
+}
+
+/* Khử hoàn toàn margin cho các nút bấm phân trang nằm trong form-inline */
+.qcare-pagination-block .btn {
+    margin: 0 !important;
+}
+
+/* ==========================================================================
+   QCARE HEALTH SYSTEM - FORM ELEMENT STYLES (FULL CLEAN SEPARATION)
+   ========================================================================== */
+
+/* Thẻ x_panel bọc ngoài form */
+.qcare-form-panel {
+    border-radius: 8px;
+}
+
+/* Tiêu đề chính của Form nhập liệu */
+.qcare-form-main-title {
+    font-weight: bold; 
+    color: #0f766e;
+}
+
+/* Tiêu đề phân đoạn phân khu thông tin Form (H5) */
+.qcare-form-section-title {
+    font-weight: bold; 
+    padding-left: 10px; 
+    margin-top: 30px; 
+    margin-bottom: 20px;
+}
+
+/* Biến thể màu sắc cho từng phân khu thông tin Form */
+.qcare-form-section-title.section-blue {
+    color: #2563eb; 
+    margin-top: 0px; /* Phân khu đầu tiên không cần margin-top */
+}
+
+.qcare-form-section-title.section-teal {
+    color: #0f766e; 
+}
+
+.qcare-form-section-title.section-amber {
+    color: #b45309; 
+}
+
+/* Trường hợp đặc biệt: Ô chọn trạng thái điều trị */
+.qcare-form-status-select {
+    width: 200px;
+}
+
+/* Ép kiểu nền xám nhạt Readonly cho Textbox khi ở trạng thái chỉnh sửa (Edit Mode) */
+.qcare-form-input-readonly {
+    background-color: #f1f5f9 !important;
+}
+
+/* Cấu trúc nút bấm Xác nhận / Quay về trong form */
+.qcare-form-btn {
+    border-radius: 4px; 
+    padding: 6px 20px;
+}
+
+/* ==========================================================================
+   GENTELELLA ORIGINAL TABLE THEAD THEME - CLEAN RECOVERY
+   ========================================================================== */
+
+/* Trả về khung lưới thead nhẹ nhàng, không đổ màu nền bọc thô */
+.table-responsive table.jambo_table > thead {
+    background: #ffffff !important;
+}
+
+/* Định dạng text tiêu đề mảnh, thoáng đạt đúng chuẩn ảnh gốc template */
+.table-responsive table.jambo_table > thead > tr > th {
+    color: #2A3F54 !important;
+    font-weight: 600 !important;
+    font-size: 13px !important;
+    padding: 12px 10px !important;
+    border-bottom: 2px solid #e2e8f0 !important;
+    border-top: 1px solid #e2e8f0 !important;
+    background-image: none !important;
+}
+
+/* Căn giữa tiêu đề các cột đặc thù theo luồng danh sách */
+.qcare-th-center {
+    text-align: center !important;
+}
+
+/* Đảm bảo hàng bộ lọc filter có khoảng cách đệm thoáng, dẹt mượt mà */
+.qcare-filter-row td {
+    padding: 6px 6px !important;
+    background-color: #fafafa !important;
+    border-bottom: 1px solid #e2e8f0 !important;
+}
+/* Các class khống chế độ rộng cho từng cột tiêu đề (th) */
+.qcare-th-stt { width: 50px; }
+.qcare-th-code { width: 130px; }
+.qcare-th-phone { width: 130px; }
+.qcare-th-package { width: 140px; }
+.qcare-th-date { width: 130px; }
+.qcare-th-status { width: 130px; }
+.qcare-th-action { width: 130px; }
+
+/* Class chuyên dụng căn giữa tiêu đề th */
+.qcare-th-center {
+    text-align: center !important;
+}
