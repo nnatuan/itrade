@@ -54,6 +54,43 @@ class Do_bot_client extends CI_Controller
     var $m_txt_fbasket_tp_phan_tram  = '0.0'; 
     var $m_arr_steps         = array();
 
+    // Thuộc tính cấu hình chuyên biệt cho V38 (Onefxhub_v38.38 Safety R3)
+    var $m_cbat_cong_spread_tp           = '1';
+    var $m_fkhoang_doi_sl                = '25.0';
+    var $m_fso_pip_doi_sl                = '15.0';
+    var $m_fkhoang_trailing_sl           = '10.0';
+    var $m_cbat_cat_dd                   = '0';
+    var $m_fcat_dd_phan_tram             = '0.0';
+    var $m_ndd_hedge_magic               = '888838';
+    var $m_nserver_gmt                   = '3';
+    var $m_nlocal_gmt                    = '7';
+    var $m_cenable_asia                  = '1';
+    var $m_nasia_start_hour              = '5';
+    var $m_nasia_start_minute            = '0';
+    var $m_nasia_end_hour                = '14';
+    var $m_nasia_end_minute              = '0';
+    var $m_cenable_europe                = '1';
+    var $m_neurope_start_hour            = '14';
+    var $m_neurope_start_minute          = '0';
+    var $m_neurope_end_hour              = '23';
+    var $m_neurope_end_minute            = '0';
+    var $m_cenable_us                    = '1';
+    var $m_nus_start_hour                = '19';
+    var $m_nus_start_minute              = '0';
+    var $m_nus_end_hour                  = '4';
+    var $m_nus_end_minute                = '0';
+    var $m_nclose_protect_max_orders     = '8';
+    var $m_cclose_protect_use_loss_pct   = '1';
+    var $m_fclose_protect_loss_pct       = '0.3';
+    var $m_cenable_double_confirm        = '1';
+    var $m_nentry_strategy               = '0';
+    var $m_nglobal_orders_per_group      = '6';
+    var $m_fglobal_breakout_distance_usd = '3.0';
+    var $m_cglobal_local_distances       = '4,4,8,8,12,12,16,16,20,20,24,24,28,28,32,32,36,36,40,40,44,44,48,48,52';
+    var $m_npairclose_mode               = '1';
+    var $m_noriginal_pairclose_start_order = '20';
+    var $m_nrecursive_rebase_target_level = '15';
+
     var $m_error_msg      = '';
 
     function __construct()
@@ -160,9 +197,75 @@ class Do_bot_client extends CI_Controller
             $this->m_cbof_cpair_close_chot_dan_ve = isset($_POST['cbof_cpair_close_chot_dan_ve']) ? '1' : '0';
             $this->m_txt_fbasket_tp_phan_tram  = $_POST['txt_fbasket_tp_phan_tram'];
 
-            for($i=1; $i<=25; $i++){
-                if(isset($_POST['step_G'.$i])) {
-                    $this->m_arr_steps['G'.$i] = (double)$_POST['step_G'.$i];
+            // BỔ SUNG BẮT DỮ LIỆU CẤU HÌNH V38
+            $this->m_cbat_cong_spread_tp           = isset($_POST['cbat_cong_spread_tp']) ? '1' : '0';
+            $this->m_fkhoang_doi_sl                = isset($_POST['fkhoang_doi_sl']) ? $_POST['fkhoang_doi_sl'] : $this->m_fkhoang_doi_sl;
+            $this->m_fso_pip_doi_sl                = isset($_POST['fso_pip_doi_sl']) ? $_POST['fso_pip_doi_sl'] : $this->m_fso_pip_doi_sl;
+            $this->m_fkhoang_trailing_sl           = isset($_POST['fkhoang_trailing_sl']) ? $_POST['fkhoang_trailing_sl'] : $this->m_fkhoang_trailing_sl;
+            $this->m_cbat_cat_dd                   = isset($_POST['cbat_cat_dd']) ? '1' : '0';
+            $this->m_fcat_dd_phan_tram             = isset($_POST['fcat_dd_phan_tram']) ? $_POST['fcat_dd_phan_tram'] : $this->m_fcat_dd_phan_tram;
+            $this->m_ndd_hedge_magic               = isset($_POST['ndd_hedge_magic']) ? $_POST['ndd_hedge_magic'] : $this->m_ndd_hedge_magic;
+            $this->m_nserver_gmt                   = isset($_POST['nserver_gmt']) ? $_POST['nserver_gmt'] : $this->m_nserver_gmt;
+            $this->m_nlocal_gmt                    = isset($_POST['nlocal_gmt']) ? $_POST['nlocal_gmt'] : $this->m_nlocal_gmt;
+            $this->m_cenable_asia                  = isset($_POST['cenable_asia']) ? '1' : '0';
+            $this->m_nasia_start_hour              = isset($_POST['nasia_start_hour']) ? $_POST['nasia_start_hour'] : $this->m_nasia_start_hour;
+            $this->m_nasia_start_minute            = isset($_POST['nasia_start_minute']) ? $_POST['nasia_start_minute'] : $this->m_nasia_start_minute;
+            $this->m_nasia_end_hour                = isset($_POST['nasia_end_hour']) ? $_POST['nasia_end_hour'] : $this->m_nasia_end_hour;
+            $this->m_nasia_end_minute              = isset($_POST['nasia_end_minute']) ? $_POST['nasia_end_minute'] : $this->m_nasia_end_minute;
+            $this->m_cenable_europe                = isset($_POST['cenable_europe']) ? '1' : '0';
+            $this->m_neurope_start_hour            = isset($_POST['neurope_start_hour']) ? $_POST['neurope_start_hour'] : $this->m_neurope_start_hour;
+            $this->m_neurope_start_minute          = isset($_POST['neurope_start_minute']) ? $_POST['neurope_start_minute'] : $this->m_neurope_start_minute;
+            $this->m_neurope_end_hour              = isset($_POST['neurope_end_hour']) ? $_POST['neurope_end_hour'] : $this->m_neurope_end_hour;
+            $this->m_neurope_end_minute            = isset($_POST['neurope_end_minute']) ? $_POST['neurope_end_minute'] : $this->m_neurope_end_minute;
+            $this->m_cenable_us                    = isset($_POST['cenable_us']) ? '1' : '0';
+            $this->m_nus_start_hour                = isset($_POST['nus_start_hour']) ? $_POST['nus_start_hour'] : $this->m_nus_start_hour;
+            $this->m_nus_start_minute              = isset($_POST['nus_start_minute']) ? $_POST['nus_start_minute'] : $this->m_nus_start_minute;
+            $this->m_nus_end_hour                  = isset($_POST['nus_end_hour']) ? $_POST['nus_end_hour'] : $this->m_nus_end_hour;
+            $this->m_nus_end_minute                = isset($_POST['nus_end_minute']) ? $_POST['nus_end_minute'] : $this->m_nus_end_minute;
+            $this->m_nclose_protect_max_orders     = isset($_POST['nclose_protect_max_orders']) ? $_POST['nclose_protect_max_orders'] : $this->m_nclose_protect_max_orders;
+            $this->m_cclose_protect_use_loss_pct   = isset($_POST['cclose_protect_use_loss_pct']) ? '1' : '0';
+            $this->m_fclose_protect_loss_pct       = isset($_POST['fclose_protect_loss_pct']) ? $_POST['fclose_protect_loss_pct'] : $this->m_fclose_protect_loss_pct;
+            $this->m_cenable_double_confirm        = isset($_POST['cenable_double_confirm']) ? '1' : '0';
+            $this->m_nentry_strategy               = isset($_POST['nentry_strategy']) ? $_POST['nentry_strategy'] : $this->m_nentry_strategy;
+            $this->m_nglobal_orders_per_group      = isset($_POST['nglobal_orders_per_group']) ? $_POST['nglobal_orders_per_group'] : $this->m_nglobal_orders_per_group;
+            $this->m_fglobal_breakout_distance_usd = isset($_POST['fglobal_breakout_distance_usd']) ? $_POST['fglobal_breakout_distance_usd'] : $this->m_fglobal_breakout_distance_usd;
+            $this->m_cglobal_local_distances       = isset($_POST['cglobal_local_distances']) ? trim($_POST['cglobal_local_distances']) : $this->m_cglobal_local_distances;
+            $this->m_npairclose_mode               = isset($_POST['npairclose_mode']) ? $_POST['npairclose_mode'] : $this->m_npairclose_mode;
+            $this->m_noriginal_pairclose_start_order = isset($_POST['noriginal_pairclose_start_order']) ? $_POST['noriginal_pairclose_start_order'] : $this->m_noriginal_pairclose_start_order;
+            $this->m_nrecursive_rebase_target_level = isset($_POST['nrecursive_rebase_target_level']) ? $_POST['nrecursive_rebase_target_level'] : $this->m_nrecursive_rebase_target_level;
+
+            if ($this->m_cbof_cbot_version == 'Onefxhub_v38') {
+                if (isset($_POST['v38_txt_finitial_lot'])) $this->m_txt_finitial_lot = $_POST['v38_txt_finitial_lot'];
+                if (isset($_POST['v38_txt_flot_multi'])) $this->m_txt_flot_multi = $_POST['v38_txt_flot_multi'];
+                if (isset($_POST['v38_txt_nmax_orders'])) $this->m_txt_nmax_orders = $_POST['v38_txt_nmax_orders'];
+                if (isset($_POST['v38_txt_ftp_pips'])) $this->m_txt_ftp_pips = $_POST['v38_txt_ftp_pips'];
+                if (isset($_POST['v38_txt_fbasket_tp_phan_tram'])) $this->m_txt_fbasket_tp_phan_tram = $_POST['v38_txt_fbasket_tp_phan_tram'];
+                if (isset($_POST['v38_txt_nrsi_period'])) $this->m_txt_nrsi_period = $_POST['v38_txt_nrsi_period'];
+                if (isset($_POST['v38_cbof_crsi_tf'])) $this->m_cbof_crsi_tf = $_POST['v38_cbof_crsi_tf'];
+                if (isset($_POST['v38_txt_nmagic'])) $this->m_txt_nmagic = $_POST['v38_txt_nmagic'];
+                if (isset($_POST['v38_cbof_cuse_time_filter'])) $this->m_cbof_cuse_time_filter = '1';
+                else if (isset($_POST['v38_hidden_time_filter_marker'])) $this->m_cbof_cuse_time_filter = '0';
+                if (isset($_POST['v38_txt_nmin_before_close'])) $this->m_txt_nmin_before_close = $_POST['v38_txt_nmin_before_close'];
+                if (isset($_POST['v38_txt_nconfirm_from_order'])) $this->m_txt_nconfirm_from_order = $_POST['v38_txt_nconfirm_from_order'];
+                if (isset($_POST['v38_cbof_cpair_close_bat_tat'])) $this->m_cbof_cpair_close_bat_tat = '1';
+                else if (isset($_POST['v38_hidden_pair_close_marker'])) $this->m_cbof_cpair_close_bat_tat = '0';
+                if (isset($_POST['v38_txt_npair_close_tu_lenh'])) $this->m_txt_npair_close_tu_lenh = $_POST['v38_txt_npair_close_tu_lenh'];
+                if (isset($_POST['v38_txt_fpair_close_so_usd'])) $this->m_txt_fpair_close_so_usd = $_POST['v38_txt_fpair_close_so_usd'];
+                if (isset($_POST['v38_cbof_cpair_close_chot_dan_ve'])) $this->m_cbof_cpair_close_chot_dan_ve = '1';
+                else if (isset($_POST['v38_hidden_pair_close_danve_marker'])) $this->m_cbof_cpair_close_chot_dan_ve = '0';
+
+                for($i=1; $i<=25; $i++){
+                    if(isset($_POST['v38_step_G'.$i])) {
+                        $this->m_arr_steps['G'.$i] = (double)$_POST['v38_step_G'.$i];
+                    } elseif(isset($_POST['step_G'.$i])) {
+                        $this->m_arr_steps['G'.$i] = (double)$_POST['step_G'.$i];
+                    }
+                }
+            } else {
+                for($i=1; $i<=25; $i++){
+                    if(isset($_POST['step_G'.$i])) {
+                        $this->m_arr_steps['G'.$i] = (double)$_POST['step_G'.$i];
+                    }
                 }
             }
         }
@@ -215,39 +318,99 @@ class Do_bot_client extends CI_Controller
                 $this->m_txt_dlicense_expiry = $client['dlicense_expiry'];
                 $this->m_cbof_cbot_status    = $client['cbot_status'];
                 
-                $settings = Obj_get_bot_settings_row($this->m_nid);
-                if(!empty($settings)) {
-                    $this->m_txt_finitial_lot  = $settings['finitial_lot'];
-                    $this->m_txt_flot_multi    = $settings['flot_multi'];
-                    $this->m_txt_nmax_orders   = $settings['nmax_orders'];
-                    $this->m_cbof_ntp_mode     = $settings['ntp_mode'];
-                    $this->m_txt_ftp_pips      = $settings['ftp_pips'];
-                    $this->m_txt_ftp_usd       = $settings['ftp_usd'];
-                    $this->m_txt_nrsi_period   = $settings['nrsi_period'];
-                    $this->m_cbof_crsi_tf      = $settings['crsi_tf'];
-                    $this->m_txt_nmagic        = $settings['nmagic'];
-                    $this->m_cbof_cuse_time_filter = $settings['cuse_time_filter'];
-                    $this->m_cbof_csession_asia    = isset($settings['csession_asia']) ? $settings['csession_asia'] : '1';
-                    $this->m_cbof_csession_london  = isset($settings['csession_london']) ? $settings['csession_london'] : '1';
-                    $this->m_cbof_csession_ny      = isset($settings['csession_ny']) ? $settings['csession_ny'] : '1';
-                    $this->m_txt_ctime_start_1     = isset($settings['ctime_start_1']) ? $settings['ctime_start_1'] : '';
-                    $this->m_txt_ctime_end_1       = isset($settings['ctime_end_1']) ? $settings['ctime_end_1'] : '';
-                    $this->m_txt_ctime_start_2     = isset($settings['ctime_start_2']) ? $settings['ctime_start_2'] : '';
-                    $this->m_txt_ctime_end_2       = isset($settings['ctime_end_2']) ? $settings['ctime_end_2'] : '';
-                    $this->m_txt_ctime_start_3     = isset($settings['ctime_start_3']) ? $settings['ctime_start_3'] : '';
-                    $this->m_txt_ctime_end_3       = isset($settings['ctime_end_3']) ? $settings['ctime_end_3'] : '';
-                    $this->m_txt_nstart_hour_local = $settings['nstart_hour_local'];
-                    $this->m_txt_nend_hour_local   = $settings['nend_hour_local'];
-                    $this->m_txt_nmin_before_close = isset($settings['nmin_before_close']) ? $settings['nmin_before_close'] : '60';
-                    $this->m_txt_nconfirm_from_order = isset($settings['nconfirm_from_order']) ? $settings['nconfirm_from_order'] : '10';
-                    $this->m_cbof_cpair_close_bat_tat = $settings['cpair_close_bat_tat'];
-                    $this->m_txt_npair_close_tu_lenh   = $settings['npair_close_tu_lenh'];
-                    $this->m_txt_fpair_close_so_usd    = $settings['fpair_close_so_usd'];
-                    $this->m_cbof_cpair_close_chot_dan_ve = isset($settings['cpair_close_chot_dan_ve']) ? $settings['cpair_close_chot_dan_ve'] : '0';
-                    $this->m_txt_fbasket_tp_phan_tram  = $settings['fbasket_tp_phan_tram'];
-                    
-                    if(!empty($settings['cstep_distances'])) {
-                        $this->m_arr_steps = json_decode($settings['cstep_distances'], true);
+                if ($this->m_cbof_cbot_version == 'Onefxhub_v38') {
+                    $settings_v38 = Obj_get_bot_settings_v38_row($this->m_nid);
+                    if(!empty($settings_v38)) {
+                        $this->m_txt_finitial_lot  = $settings_v38['finitial_lot'];
+                        $this->m_txt_flot_multi    = $settings_v38['flot_multi'];
+                        $this->m_txt_nmax_orders   = $settings_v38['nmax_orders'];
+                        $this->m_txt_ftp_pips      = $settings_v38['ftp_pips'];
+                        $this->m_txt_fbasket_tp_phan_tram = $settings_v38['fbasket_tp_phan_tram'];
+                        $this->m_cbat_cong_spread_tp = $settings_v38['cbat_cong_spread_tp'];
+                        $this->m_fkhoang_doi_sl    = $settings_v38['fkhoang_doi_sl'];
+                        $this->m_fso_pip_doi_sl    = $settings_v38['fso_pip_doi_sl'];
+                        $this->m_fkhoang_trailing_sl = $settings_v38['fkhoang_trailing_sl'];
+                        $this->m_cbat_cat_dd       = $settings_v38['cbat_cat_dd'];
+                        $this->m_fcat_dd_phan_tram = $settings_v38['fcat_dd_phan_tram'];
+                        $this->m_ndd_hedge_magic   = $settings_v38['ndd_hedge_magic'];
+                        $this->m_txt_nrsi_period   = $settings_v38['nrsi_period'];
+                        $this->m_cbof_crsi_tf      = $settings_v38['crsi_tf'];
+                        $this->m_txt_nmagic        = $settings_v38['nmagic'];
+                        $this->m_cbof_cuse_time_filter = $settings_v38['cuse_time_filter'];
+                        $this->m_nserver_gmt       = $settings_v38['nserver_gmt'];
+                        $this->m_nlocal_gmt        = $settings_v38['nlocal_gmt'];
+                        $this->m_cenable_asia      = $settings_v38['cenable_asia'];
+                        $this->m_nasia_start_hour  = $settings_v38['nasia_start_hour'];
+                        $this->m_nasia_start_minute = $settings_v38['nasia_start_minute'];
+                        $this->m_nasia_end_hour    = $settings_v38['nasia_end_hour'];
+                        $this->m_nasia_end_minute  = $settings_v38['nasia_end_minute'];
+                        $this->m_cenable_europe    = $settings_v38['cenable_europe'];
+                        $this->m_neurope_start_hour = $settings_v38['neurope_start_hour'];
+                        $this->m_neurope_start_minute = $settings_v38['neurope_start_minute'];
+                        $this->m_neurope_end_hour  = $settings_v38['neurope_end_hour'];
+                        $this->m_neurope_end_minute = $settings_v38['neurope_end_minute'];
+                        $this->m_cenable_us        = $settings_v38['cenable_us'];
+                        $this->m_nus_start_hour    = $settings_v38['nus_start_hour'];
+                        $this->m_nus_start_minute  = $settings_v38['nus_start_minute'];
+                        $this->m_nus_end_hour      = $settings_v38['nus_end_hour'];
+                        $this->m_nus_end_minute    = $settings_v38['nus_end_minute'];
+                        $this->m_txt_nmin_before_close = $settings_v38['nmin_before_close'];
+                        $this->m_nclose_protect_max_orders = $settings_v38['nclose_protect_max_orders'];
+                        $this->m_cclose_protect_use_loss_pct = $settings_v38['cclose_protect_use_loss_pct'];
+                        $this->m_fclose_protect_loss_pct = $settings_v38['fclose_protect_loss_pct'];
+                        $this->m_cenable_double_confirm = $settings_v38['cenable_double_confirm'];
+                        $this->m_txt_nconfirm_from_order = $settings_v38['nconfirm_from_order'];
+                        $this->m_nentry_strategy   = $settings_v38['nentry_strategy'];
+                        $this->m_nglobal_orders_per_group = $settings_v38['nglobal_orders_per_group'];
+                        $this->m_fglobal_breakout_distance_usd = $settings_v38['fglobal_breakout_distance_usd'];
+                        $this->m_cglobal_local_distances = $settings_v38['cglobal_local_distances'];
+                        $this->m_npairclose_mode   = $settings_v38['npairclose_mode'];
+                        $this->m_cbof_cpair_close_bat_tat = $settings_v38['cpair_close_bat_tat'];
+                        $this->m_txt_npair_close_tu_lenh = $settings_v38['npair_close_tu_lenh'];
+                        $this->m_txt_fpair_close_so_usd = $settings_v38['fpair_close_so_usd'];
+                        $this->m_cbof_cpair_close_chot_dan_ve = $settings_v38['cpair_close_chot_dan_ve'];
+                        $this->m_noriginal_pairclose_start_order = $settings_v38['noriginal_pairclose_start_order'];
+                        $this->m_nrecursive_rebase_target_level = $settings_v38['nrecursive_rebase_target_level'];
+                        
+                        if(!empty($settings_v38['cstep_distances'])) {
+                            $this->m_arr_steps = json_decode($settings_v38['cstep_distances'], true);
+                        }
+                    }
+                } else {
+                    $settings = Obj_get_bot_settings_row($this->m_nid);
+                    if(!empty($settings)) {
+                        $this->m_txt_finitial_lot  = $settings['finitial_lot'];
+                        $this->m_txt_flot_multi    = $settings['flot_multi'];
+                        $this->m_txt_nmax_orders   = $settings['nmax_orders'];
+                        $this->m_cbof_ntp_mode     = $settings['ntp_mode'];
+                        $this->m_txt_ftp_pips      = $settings['ftp_pips'];
+                        $this->m_txt_ftp_usd       = $settings['ftp_usd'];
+                        $this->m_txt_nrsi_period   = $settings['nrsi_period'];
+                        $this->m_cbof_crsi_tf      = $settings['crsi_tf'];
+                        $this->m_txt_nmagic        = $settings['nmagic'];
+                        $this->m_cbof_cuse_time_filter = $settings['cuse_time_filter'];
+                        $this->m_cbof_csession_asia    = isset($settings['csession_asia']) ? $settings['csession_asia'] : '1';
+                        $this->m_cbof_csession_london  = isset($settings['csession_london']) ? $settings['csession_london'] : '1';
+                        $this->m_cbof_csession_ny      = isset($settings['csession_ny']) ? $settings['csession_ny'] : '1';
+                        $this->m_txt_ctime_start_1     = isset($settings['ctime_start_1']) ? $settings['ctime_start_1'] : '';
+                        $this->m_txt_ctime_end_1       = isset($settings['ctime_end_1']) ? $settings['ctime_end_1'] : '';
+                        $this->m_txt_ctime_start_2     = isset($settings['ctime_start_2']) ? $settings['ctime_start_2'] : '';
+                        $this->m_txt_ctime_end_2       = isset($settings['ctime_end_2']) ? $settings['ctime_end_2'] : '';
+                        $this->m_txt_ctime_start_3     = isset($settings['ctime_start_3']) ? $settings['ctime_start_3'] : '';
+                        $this->m_txt_ctime_end_3       = isset($settings['ctime_end_3']) ? $settings['ctime_end_3'] : '';
+                        $this->m_txt_nstart_hour_local = $settings['nstart_hour_local'];
+                        $this->m_txt_nend_hour_local   = $settings['nend_hour_local'];
+                        $this->m_txt_nmin_before_close = isset($settings['nmin_before_close']) ? $settings['nmin_before_close'] : '60';
+                        $this->m_txt_nconfirm_from_order = isset($settings['nconfirm_from_order']) ? $settings['nconfirm_from_order'] : '10';
+                        $this->m_cbof_cpair_close_bat_tat = $settings['cpair_close_bat_tat'];
+                        $this->m_txt_npair_close_tu_lenh   = $settings['npair_close_tu_lenh'];
+                        $this->m_txt_fpair_close_so_usd    = $settings['fpair_close_so_usd'];
+                        $this->m_cbof_cpair_close_chot_dan_ve = isset($settings['cpair_close_chot_dan_ve']) ? $settings['cpair_close_chot_dan_ve'] : '0';
+                        $this->m_txt_fbasket_tp_phan_tram  = $settings['fbasket_tp_phan_tram'];
+                        
+                        if(!empty($settings['cstep_distances'])) {
+                            $this->m_arr_steps = json_decode($settings['cstep_distances'], true);
+                        }
                     }
                 }
             }
@@ -313,39 +476,97 @@ class Do_bot_client extends CI_Controller
 			$this->db->insert('tbot_client', $data_client);
 			$n_client_id = $this->db->insert_id();
 
-			$data_settings = array(
-				'nclient_id'           => $n_client_id,
-				'finitial_lot'         => (double)$this->m_txt_finitial_lot,
-				'flot_multi'           => (double)$this->m_txt_flot_multi,
-				'nmax_orders'          => (int)$this->m_txt_nmax_orders,
-				'ntp_mode'             => (int)$this->m_cbof_ntp_mode,
-				'ftp_pips'             => (double)$this->m_txt_ftp_pips,
-				'ftp_usd'              => (double)$this->m_txt_ftp_usd,
-				'nrsi_period'          => (int)$this->m_txt_nrsi_period,
-				'crsi_tf'              => $this->m_cbof_crsi_tf,
-				'nmagic'               => (int)$this->m_txt_nmagic,
-				'cuse_time_filter'     => $this->m_cbof_cuse_time_filter,
-				'csession_asia'        => $this->m_cbof_csession_asia,
-				'csession_london'      => $this->m_cbof_csession_london,
-				'csession_ny'          => $this->m_cbof_csession_ny,
-				'ctime_start_1'        => $this->m_txt_ctime_start_1,
-				'ctime_end_1'          => $this->m_txt_ctime_end_1,
-				'ctime_start_2'        => $this->m_txt_ctime_start_2,
-				'ctime_end_2'          => $this->m_txt_ctime_end_2,
-				'ctime_start_3'        => $this->m_txt_ctime_start_3,
-				'ctime_end_3'          => $this->m_txt_ctime_end_3,
-				'nstart_hour_local'    => (int)$this->m_txt_nstart_hour_local,
-				'nend_hour_local'      => (int)$this->m_txt_nend_hour_local,
-				'nmin_before_close'    => (int)$this->m_txt_nmin_before_close,
-				'nconfirm_from_order'  => (int)$this->m_txt_nconfirm_from_order,
-				'cpair_close_bat_tat'  => $this->m_cbof_cpair_close_bat_tat,
-				'npair_close_tu_lenh'   => (int)$this->m_txt_npair_close_tu_lenh,
-				'fpair_close_so_usd'    => (double)$this->m_txt_fpair_close_so_usd,
-				'cpair_close_chot_dan_ve'=> $this->m_cbof_cpair_close_chot_dan_ve,
-				'fbasket_tp_phan_tram' => (double)$this->m_txt_fbasket_tp_phan_tram,
-				'cstep_distances'      => json_encode($this->m_arr_steps)
-			);
-			$this->db->insert('tbot_settings', $data_settings);
+			if ($this->m_cbof_cbot_version == 'Onefxhub_v38') {
+				$data_settings = array(
+					'nclient_id'                    => $n_client_id,
+					'finitial_lot'                  => (double)$this->m_txt_finitial_lot,
+					'flot_multi'                    => (double)$this->m_txt_flot_multi,
+					'nmax_orders'                   => (int)$this->m_txt_nmax_orders,
+					'ftp_pips'                      => (double)$this->m_txt_ftp_pips,
+					'fbasket_tp_phan_tram'          => (double)$this->m_txt_fbasket_tp_phan_tram,
+					'cbat_cong_spread_tp'           => $this->m_cbat_cong_spread_tp,
+					'fkhoang_doi_sl'                => (double)$this->m_fkhoang_doi_sl,
+					'fso_pip_doi_sl'                => (double)$this->m_fso_pip_doi_sl,
+					'fkhoang_trailing_sl'           => (double)$this->m_fkhoang_trailing_sl,
+					'cbat_cat_dd'                   => $this->m_cbat_cat_dd,
+					'fcat_dd_phan_tram'             => (double)$this->m_fcat_dd_phan_tram,
+					'ndd_hedge_magic'               => (int)$this->m_ndd_hedge_magic,
+					'nrsi_period'                   => (int)$this->m_txt_nrsi_period,
+					'crsi_tf'                       => $this->m_cbof_crsi_tf,
+					'nmagic'                        => (int)$this->m_txt_nmagic,
+					'cuse_time_filter'              => $this->m_cbof_cuse_time_filter,
+					'nserver_gmt'                   => (int)$this->m_nserver_gmt,
+					'nlocal_gmt'                    => (int)$this->m_nlocal_gmt,
+					'cenable_asia'                  => $this->m_cenable_asia,
+					'nasia_start_hour'              => (int)$this->m_nasia_start_hour,
+					'nasia_start_minute'            => (int)$this->m_nasia_start_minute,
+					'nasia_end_hour'                => (int)$this->m_nasia_end_hour,
+					'nasia_end_minute'              => (int)$this->m_nasia_end_minute,
+					'cenable_europe'                => $this->m_cenable_europe,
+					'neurope_start_hour'            => (int)$this->m_neurope_start_hour,
+					'neurope_start_minute'          => (int)$this->m_neurope_start_minute,
+					'neurope_end_hour'              => (int)$this->m_neurope_end_hour,
+					'neurope_end_minute'            => (int)$this->m_neurope_end_minute,
+					'cenable_us'                    => $this->m_cenable_us,
+					'nus_start_hour'                => (int)$this->m_nus_start_hour,
+					'nus_start_minute'              => (int)$this->m_nus_start_minute,
+					'nus_end_hour'                  => (int)$this->m_nus_end_hour,
+					'nus_end_minute'                => (int)$this->m_nus_end_minute,
+					'nmin_before_close'             => (int)$this->m_txt_nmin_before_close,
+					'nclose_protect_max_orders'     => (int)$this->m_nclose_protect_max_orders,
+					'cclose_protect_use_loss_pct'   => $this->m_cclose_protect_use_loss_pct,
+					'fclose_protect_loss_pct'       => (double)$this->m_fclose_protect_loss_pct,
+					'cenable_double_confirm'        => $this->m_cenable_double_confirm,
+					'nconfirm_from_order'           => (int)$this->m_txt_nconfirm_from_order,
+					'nentry_strategy'               => (int)$this->m_nentry_strategy,
+					'nglobal_orders_per_group'      => (int)$this->m_nglobal_orders_per_group,
+					'fglobal_breakout_distance_usd' => (double)$this->m_fglobal_breakout_distance_usd,
+					'cglobal_local_distances'       => $this->m_cglobal_local_distances,
+					'npairclose_mode'               => (int)$this->m_npairclose_mode,
+					'cpair_close_bat_tat'           => $this->m_cbof_cpair_close_bat_tat,
+					'npair_close_tu_lenh'           => (int)$this->m_txt_npair_close_tu_lenh,
+					'fpair_close_so_usd'            => (double)$this->m_txt_fpair_close_so_usd,
+					'cpair_close_chot_dan_ve'       => $this->m_cbof_cpair_close_chot_dan_ve,
+					'noriginal_pairclose_start_order'=> (int)$this->m_noriginal_pairclose_start_order,
+					'nrecursive_rebase_target_level' => (int)$this->m_nrecursive_rebase_target_level,
+					'cstep_distances'               => json_encode($this->m_arr_steps)
+				);
+				$this->db->insert('tbot_settings_v38', $data_settings);
+			} else {
+				$data_settings = array(
+					'nclient_id'           => $n_client_id,
+					'finitial_lot'         => (double)$this->m_txt_finitial_lot,
+					'flot_multi'           => (double)$this->m_txt_flot_multi,
+					'nmax_orders'          => (int)$this->m_txt_nmax_orders,
+					'ntp_mode'             => (int)$this->m_cbof_ntp_mode,
+					'ftp_pips'             => (double)$this->m_txt_ftp_pips,
+					'ftp_usd'              => (double)$this->m_txt_ftp_usd,
+					'nrsi_period'          => (int)$this->m_txt_nrsi_period,
+					'crsi_tf'              => $this->m_cbof_crsi_tf,
+					'nmagic'               => (int)$this->m_txt_nmagic,
+					'cuse_time_filter'     => $this->m_cbof_cuse_time_filter,
+					'csession_asia'        => $this->m_cbof_csession_asia,
+					'csession_london'      => $this->m_cbof_csession_london,
+					'csession_ny'          => $this->m_cbof_csession_ny,
+					'ctime_start_1'        => $this->m_txt_ctime_start_1,
+					'ctime_end_1'          => $this->m_txt_ctime_end_1,
+					'ctime_start_2'        => $this->m_txt_ctime_start_2,
+					'ctime_end_2'          => $this->m_txt_ctime_end_2,
+					'ctime_start_3'        => $this->m_txt_ctime_start_3,
+					'ctime_end_3'          => $this->m_txt_ctime_end_3,
+					'nstart_hour_local'    => (int)$this->m_txt_nstart_hour_local,
+					'nend_hour_local'      => (int)$this->m_txt_nend_hour_local,
+					'nmin_before_close'    => (int)$this->m_txt_nmin_before_close,
+					'nconfirm_from_order'  => (int)$this->m_txt_nconfirm_from_order,
+					'cpair_close_bat_tat'  => $this->m_cbof_cpair_close_bat_tat,
+					'npair_close_tu_lenh'   => (int)$this->m_txt_npair_close_tu_lenh,
+					'fpair_close_so_usd'    => (double)$this->m_txt_fpair_close_so_usd,
+					'cpair_close_chot_dan_ve'=> $this->m_cbof_cpair_close_chot_dan_ve,
+					'fbasket_tp_phan_tram' => (double)$this->m_txt_fbasket_tp_phan_tram,
+					'cstep_distances'      => json_encode($this->m_arr_steps)
+				);
+				$this->db->insert('tbot_settings', $data_settings);
+			}
 
 			$data_history = array(
 				'nclient_id'    => $n_client_id,
@@ -393,38 +614,107 @@ class Do_bot_client extends CI_Controller
 			);
 			$this->db->where('nid', (int)$this->m_nid)->update('tbot_client', $data_client);
 
-			$data_settings = array(
-				'finitial_lot'         => (double)$this->m_txt_finitial_lot,
-				'flot_multi'           => (double)$this->m_txt_flot_multi,
-				'nmax_orders'          => (int)$this->m_txt_nmax_orders,
-				'ntp_mode'             => (int)$this->m_cbof_ntp_mode,
-				'ftp_pips'             => (double)$this->m_txt_ftp_pips,
-				'ftp_usd'              => (double)$this->m_txt_ftp_usd,
-				'nrsi_period'          => (int)$this->m_txt_nrsi_period,
-				'crsi_tf'              => $this->m_cbof_crsi_tf,
-				'nmagic'               => (int)$this->m_txt_nmagic,
-				'cuse_time_filter'     => $this->m_cbof_cuse_time_filter,
-				'csession_asia'        => $this->m_cbof_csession_asia,
-				'csession_london'      => $this->m_cbof_csession_london,
-				'csession_ny'          => $this->m_cbof_csession_ny,
-				'ctime_start_1'        => $this->m_txt_ctime_start_1,
-				'ctime_end_1'          => $this->m_txt_ctime_end_1,
-				'ctime_start_2'        => $this->m_txt_ctime_start_2,
-				'ctime_end_2'          => $this->m_txt_ctime_end_2,
-				'ctime_start_3'        => $this->m_txt_ctime_start_3,
-				'ctime_end_3'          => $this->m_txt_ctime_end_3,
-				'nstart_hour_local'    => (int)$this->m_txt_nstart_hour_local,
-				'nend_hour_local'      => (int)$this->m_txt_nend_hour_local,
-				'nmin_before_close'    => (int)$this->m_txt_nmin_before_close,
-				'nconfirm_from_order'  => (int)$this->m_txt_nconfirm_from_order,
-				'cpair_close_bat_tat'  => $this->m_cbof_cpair_close_bat_tat,
-				'npair_close_tu_lenh'   => (int)$this->m_txt_npair_close_tu_lenh,
-				'fpair_close_so_usd'    => (double)$this->m_txt_fpair_close_so_usd,
-				'cpair_close_chot_dan_ve'=> $this->m_cbof_cpair_close_chot_dan_ve,
-				'fbasket_tp_phan_tram' => (double)$this->m_txt_fbasket_tp_phan_tram,
-				'cstep_distances'      => json_encode($this->m_arr_steps)
-			);
-			$this->db->where('nclient_id', (int)$this->m_nid)->update('tbot_settings', $data_settings);
+			if ($this->m_cbof_cbot_version == 'Onefxhub_v38') {
+				$data_settings = array(
+					'finitial_lot'                  => (double)$this->m_txt_finitial_lot,
+					'flot_multi'                    => (double)$this->m_txt_flot_multi,
+					'nmax_orders'                   => (int)$this->m_txt_nmax_orders,
+					'ftp_pips'                      => (double)$this->m_txt_ftp_pips,
+					'fbasket_tp_phan_tram'          => (double)$this->m_txt_fbasket_tp_phan_tram,
+					'cbat_cong_spread_tp'           => $this->m_cbat_cong_spread_tp,
+					'fkhoang_doi_sl'                => (double)$this->m_fkhoang_doi_sl,
+					'fso_pip_doi_sl'                => (double)$this->m_fso_pip_doi_sl,
+					'fkhoang_trailing_sl'           => (double)$this->m_fkhoang_trailing_sl,
+					'cbat_cat_dd'                   => $this->m_cbat_cat_dd,
+					'fcat_dd_phan_tram'             => (double)$this->m_fcat_dd_phan_tram,
+					'ndd_hedge_magic'               => (int)$this->m_ndd_hedge_magic,
+					'nrsi_period'                   => (int)$this->m_txt_nrsi_period,
+					'crsi_tf'                       => $this->m_cbof_crsi_tf,
+					'nmagic'                        => (int)$this->m_txt_nmagic,
+					'cuse_time_filter'              => $this->m_cbof_cuse_time_filter,
+					'nserver_gmt'                   => (int)$this->m_nserver_gmt,
+					'nlocal_gmt'                    => (int)$this->m_nlocal_gmt,
+					'cenable_asia'                  => $this->m_cenable_asia,
+					'nasia_start_hour'              => (int)$this->m_nasia_start_hour,
+					'nasia_start_minute'            => (int)$this->m_nasia_start_minute,
+					'nasia_end_hour'                => (int)$this->m_nasia_end_hour,
+					'nasia_end_minute'              => (int)$this->m_nasia_end_minute,
+					'cenable_europe'                => $this->m_cenable_europe,
+					'neurope_start_hour'            => (int)$this->m_neurope_start_hour,
+					'neurope_start_minute'          => (int)$this->m_neurope_start_minute,
+					'neurope_end_hour'              => (int)$this->m_neurope_end_hour,
+					'neurope_end_minute'            => (int)$this->m_neurope_end_minute,
+					'cenable_us'                    => $this->m_cenable_us,
+					'nus_start_hour'                => (int)$this->m_nus_start_hour,
+					'nus_start_minute'              => (int)$this->m_nus_start_minute,
+					'nus_end_hour'                  => (int)$this->m_nus_end_hour,
+					'nus_end_minute'                => (int)$this->m_nus_end_minute,
+					'nmin_before_close'             => (int)$this->m_txt_nmin_before_close,
+					'nclose_protect_max_orders'     => (int)$this->m_nclose_protect_max_orders,
+					'cclose_protect_use_loss_pct'   => $this->m_cclose_protect_use_loss_pct,
+					'fclose_protect_loss_pct'       => (double)$this->m_fclose_protect_loss_pct,
+					'cenable_double_confirm'        => $this->m_cenable_double_confirm,
+					'nconfirm_from_order'           => (int)$this->m_txt_nconfirm_from_order,
+					'nentry_strategy'               => (int)$this->m_nentry_strategy,
+					'nglobal_orders_per_group'      => (int)$this->m_nglobal_orders_per_group,
+					'fglobal_breakout_distance_usd' => (double)$this->m_fglobal_breakout_distance_usd,
+					'cglobal_local_distances'       => $this->m_cglobal_local_distances,
+					'npairclose_mode'               => (int)$this->m_npairclose_mode,
+					'cpair_close_bat_tat'           => $this->m_cbof_cpair_close_bat_tat,
+					'npair_close_tu_lenh'           => (int)$this->m_txt_npair_close_tu_lenh,
+					'fpair_close_so_usd'            => (double)$this->m_txt_fpair_close_so_usd,
+					'cpair_close_chot_dan_ve'       => $this->m_cbof_cpair_close_chot_dan_ve,
+					'noriginal_pairclose_start_order'=> (int)$this->m_noriginal_pairclose_start_order,
+					'nrecursive_rebase_target_level' => (int)$this->m_nrecursive_rebase_target_level,
+					'cstep_distances'               => json_encode($this->m_arr_steps)
+				);
+				$exists_v38 = $this->db->where('nclient_id', (int)$this->m_nid)->count_all_results('tbot_settings_v38');
+				if ($exists_v38 > 0) {
+					$this->db->where('nclient_id', (int)$this->m_nid)->update('tbot_settings_v38', $data_settings);
+				} else {
+					$data_settings['nclient_id'] = (int)$this->m_nid;
+					$this->db->insert('tbot_settings_v38', $data_settings);
+				}
+			} else {
+				$data_settings = array(
+					'finitial_lot'         => (double)$this->m_txt_finitial_lot,
+					'flot_multi'           => (double)$this->m_txt_flot_multi,
+					'nmax_orders'          => (int)$this->m_txt_nmax_orders,
+					'ntp_mode'             => (int)$this->m_cbof_ntp_mode,
+					'ftp_pips'             => (double)$this->m_txt_ftp_pips,
+					'ftp_usd'              => (double)$this->m_txt_ftp_usd,
+					'nrsi_period'          => (int)$this->m_txt_nrsi_period,
+					'crsi_tf'              => $this->m_cbof_crsi_tf,
+					'nmagic'               => (int)$this->m_txt_nmagic,
+					'cuse_time_filter'     => $this->m_cbof_cuse_time_filter,
+					'csession_asia'        => $this->m_cbof_csession_asia,
+					'csession_london'      => $this->m_cbof_csession_london,
+					'csession_ny'          => $this->m_cbof_csession_ny,
+					'ctime_start_1'        => $this->m_txt_ctime_start_1,
+					'ctime_end_1'          => $this->m_txt_ctime_end_1,
+					'ctime_start_2'        => $this->m_txt_ctime_start_2,
+					'ctime_end_2'          => $this->m_txt_ctime_end_2,
+					'ctime_start_3'        => $this->m_txt_ctime_start_3,
+					'ctime_end_3'          => $this->m_txt_ctime_end_3,
+					'nstart_hour_local'    => (int)$this->m_txt_nstart_hour_local,
+					'nend_hour_local'      => (int)$this->m_txt_nend_hour_local,
+					'nmin_before_close'    => (int)$this->m_txt_nmin_before_close,
+					'nconfirm_from_order'  => (int)$this->m_txt_nconfirm_from_order,
+					'cpair_close_bat_tat'  => $this->m_cbof_cpair_close_bat_tat,
+					'npair_close_tu_lenh'   => (int)$this->m_txt_npair_close_tu_lenh,
+					'fpair_close_so_usd'    => (double)$this->m_txt_fpair_close_so_usd,
+					'cpair_close_chot_dan_ve'=> $this->m_cbof_cpair_close_chot_dan_ve,
+					'fbasket_tp_phan_tram' => (double)$this->m_txt_fbasket_tp_phan_tram,
+					'cstep_distances'      => json_encode($this->m_arr_steps)
+				);
+				$exists_v33 = $this->db->where('nclient_id', (int)$this->m_nid)->count_all_results('tbot_settings');
+				if ($exists_v33 > 0) {
+					$this->db->where('nclient_id', (int)$this->m_nid)->update('tbot_settings', $data_settings);
+				} else {
+					$data_settings['nclient_id'] = (int)$this->m_nid;
+					$this->db->insert('tbot_settings', $data_settings);
+				}
+			}
 
 			if ($str_old_expiry !== NULL && $str_old_expiry != $this->m_txt_dlicense_expiry) {
 				$data_history = array(
@@ -504,6 +794,53 @@ class Do_bot_client extends CI_Controller
         $data['cbof_cpair_close_chot_dan_ve'] = $this->m_cbof_cpair_close_chot_dan_ve;
         $data['txt_fbasket_tp_phan_tram']  = $this->m_txt_fbasket_tp_phan_tram;
         $data['arr_steps']              = $this->m_arr_steps;
+
+        // BỔ SUNG TRUYỀN DỮ LIỆU CẤU HÌNH V38 SANG VIEW
+        $data['cbat_cong_spread_tp']           = $this->m_cbat_cong_spread_tp;
+        $data['fkhoang_doi_sl']                = $this->m_fkhoang_doi_sl;
+        $data['fso_pip_doi_sl']                = $this->m_fso_pip_doi_sl;
+        $data['fkhoang_trailing_sl']           = $this->m_fkhoang_trailing_sl;
+        $data['cbat_cat_dd']                   = $this->m_cbat_cat_dd;
+        $data['fcat_dd_phan_tram']             = $this->m_fcat_dd_phan_tram;
+        $data['ndd_hedge_magic']               = $this->m_ndd_hedge_magic;
+        $data['nserver_gmt']                   = $this->m_nserver_gmt;
+        $data['nlocal_gmt']                    = $this->m_nlocal_gmt;
+        $data['cenable_asia']                  = $this->m_cenable_asia;
+        $data['nasia_start_hour']              = $this->m_nasia_start_hour;
+        $data['nasia_start_minute']            = $this->m_nasia_start_minute;
+        $data['nasia_end_hour']                = $this->m_nasia_end_hour;
+        $data['nasia_end_minute']              = $this->m_nasia_end_minute;
+        $data['cenable_europe']                = $this->m_cenable_europe;
+        $data['neurope_start_hour']            = $this->m_neurope_start_hour;
+        $data['neurope_start_minute']          = $this->m_neurope_start_minute;
+        $data['neurope_end_hour']              = $this->m_neurope_end_hour;
+        $data['neurope_end_minute']            = $this->m_neurope_end_minute;
+        $data['cenable_us']                    = $this->m_cenable_us;
+        $data['nus_start_hour']                = $this->m_nus_start_hour;
+        $data['nus_start_minute']              = $this->m_nus_start_minute;
+        $data['nus_end_hour']                  = $this->m_nus_end_hour;
+        $data['nus_end_minute']                = $this->m_nus_end_minute;
+        $data['nclose_protect_max_orders']     = $this->m_nclose_protect_max_orders;
+        $data['cclose_protect_use_loss_pct']   = $this->m_cclose_protect_use_loss_pct;
+        $data['fclose_protect_loss_pct']       = $this->m_fclose_protect_loss_pct;
+        $data['cenable_double_confirm']        = $this->m_cenable_double_confirm;
+        $data['nentry_strategy']               = $this->m_nentry_strategy;
+        $data['nglobal_orders_per_group']      = $this->m_nglobal_orders_per_group;
+        $data['fglobal_breakout_distance_usd'] = $this->m_fglobal_breakout_distance_usd;
+        $data['cglobal_local_distances']       = $this->m_cglobal_local_distances;
+        $data['npairclose_mode']               = $this->m_npairclose_mode;
+        $data['noriginal_pairclose_start_order'] = $this->m_noriginal_pairclose_start_order;
+        $data['nrecursive_rebase_target_level'] = $this->m_nrecursive_rebase_target_level;
+
+        $v38_defaults_G = array(
+            1=>4, 2=>4, 3=>8, 4=>8, 5=>12, 6=>12, 7=>16, 8=>16, 9=>20, 10=>20,
+            11=>24, 12=>24, 13=>28, 14=>28, 15=>32, 16=>32, 17=>36, 18=>36, 19=>40, 20=>40,
+            21=>44, 22=>44, 23=>48, 24=>48, 25=>52
+        );
+        $data['arr_steps_v38'] = array();
+        for($i=1; $i<=25; $i++){
+            $data['arr_steps_v38']['G'.$i] = isset($this->m_arr_steps['G'.$i]) && $this->m_cbof_cbot_version == 'Onefxhub_v38' ? $this->m_arr_steps['G'.$i] : $v38_defaults_G[$i];
+        }
 
         $this->load->view('bot_client_view/index.php', $data);
     }

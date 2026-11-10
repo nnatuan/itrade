@@ -290,6 +290,19 @@ function Obj_get_bot_settings_row($n_client_id)
 }
 
 /**
+ * Lấy thông tin cấu hình tham số đầu vào (Inputs) của robot V38 theo ID Client
+ */
+function Obj_get_bot_settings_v38_row($n_client_id)
+{
+    $obj_helper =& get_instance(); 
+    $obj_helper->load->database();
+    
+    $str_sql = " SELECT * FROM " . Fget_ap_table('tbot_settings_v38') . " WHERE nclient_id = " . (int)$n_client_id;
+    $obj_result = $obj_helper->db->query($str_sql);  
+    return $obj_result->row_array();
+}
+
+/**
  * Đếm tổng số lượng tài khoản chạy Bot dựa theo bộ lọc tĩnh phục vụ phân trang (Tối ưu SELECT)
  */
 function Obj_get_bot_client_count($str_where_clause)
@@ -336,16 +349,26 @@ function Obj_get_bot_licensing_info($str_license, $str_account)
     $obj_helper =& get_instance(); 
     $obj_helper->load->database();
     
-    // Đổi c.* thành chỉ định rõ nét trường c.nid để tách biệt khóa chính với bảng settings
-    $str_sql = " SELECT c.nid, c.cmt5_account, c.clicense_key, c.dlicense_expiry, c.cbot_status, s.* FROM " . Fget_ap_table('tbot_client') . " c 
-                 INNER JOIN " . Fget_ap_table('tbot_settings') . " s ON c.nid = s.nclient_id 
-                 WHERE c.clicense_key = '" . $obj_helper->db->escape_str($str_license) . "' 
-                   AND c.cmt5_account = '" . $obj_helper->db->escape_str($str_account) . "' 
-                   AND c.cdel         = '0' 
-                 LIMIT 1 ";
-                
-    $obj_result = $obj_helper->db->query($str_sql); 
-    return $obj_result->row_array();
+    // 1. Lấy thông tin tài khoản client trước để xác định phiên bản Bot
+    $str_sql_client = " SELECT c.nid, c.cmt5_account, c.cbroker_name, c.cbot_version, c.callow_grid_near_end, c.clicense_key, c.dlicense_expiry, c.cbot_status 
+                        FROM " . Fget_ap_table('tbot_client') . " c 
+                        WHERE c.clicense_key = '" . $obj_helper->db->escape_str($str_license) . "' 
+                          AND c.cmt5_account = '" . $obj_helper->db->escape_str($str_account) . "' 
+                          AND c.cdel         = '0' 
+                        LIMIT 1 ";
+                        
+    $client = $obj_helper->db->query($str_sql_client)->row_array(); 
+    if(empty($client)) return array();
+
+    // 2. Dựa vào cbot_version để truy vấn bảng settings riêng tương ứng
+    $table_settings = ($client['cbot_version'] == 'Onefxhub_v38') ? 'tbot_settings_v38' : 'tbot_settings';
+    $str_sql_settings = " SELECT * FROM " . Fget_ap_table($table_settings) . " WHERE nclient_id = " . (int)$client['nid'];
+    $settings = $obj_helper->db->query($str_sql_settings)->row_array();
+
+    if(!empty($settings)) {
+        return array_merge($client, $settings);
+    }
+    return $client;
 }
 
 /**

@@ -8,12 +8,7 @@
 
 // ĐÓNG GÓI THẲNG THƯ VIỆN VÀO TRONG 1 FILE EX5 DUY NHẤT
 #include <Trade\Trade.mqh>
-
-// 1. Nhúng file từ thư mục Include gốc của MQL5 làm tài nguyên
-#resource "\\Include\\JAson.mqh"
-
-// 2. Dùng 2 lần "..\\" để lùi 2 cấp thư mục ra ngoài MQL5
-#include "..\\..\\Include\\JAson.mqh"
+#include <JAson.mqh>
 
 input string  _API           = "=== API CLOUD CONTROL ===";
 input string  LicenseKey     = "";      // Nhập mã License Key từ Admin cấp
@@ -38,32 +33,29 @@ input ulong   Magic          = 522345;
 input string  _Time          = "=== TRADING TIME (LOCAL GMT+7) ===";
 input bool    UseTimeFilter  = true;   // true=khung gio | false=24/7
 input int     ServerGMT      = 3;      // GMT broker server (VD: GMT+3)
-input int     LocalGMT       = 7;      // GMT local cua ban (GMT+7)
-input int     StartHourLocal = 6;      // Bat dau: 06:00 GMT+7
-input int     EndHourLocal   = 4;      // Ket thuc: 04:00 GMT+7 NGAY HOM SAU
-input bool    Session_Asia   = true;   // Sydney - Tokyo (Phien A: 05:00 - 14:00)
-input bool    Session_London = true;   // London (Phien Au: 14:00 - 23:00)
-input bool    Session_NY     = true;   // New York (Phien My: 19:00 - 04:00)
-input string  Time_Start_1   = "";     // Khung gio 1 Bat dau (HH:mm)
-input string  Time_End_1     = "";     // Khung gio 1 Ket thuc (HH:mm)
-input string  Time_Start_2   = "";     // Khung gio 2 Bat dau (HH:mm)
-input string  Time_End_2     = "";     // Khung gio 2 Ket thuc (HH:mm)
-input string  Time_Start_3   = "";     // Khung gio 3 Bat dau (HH:mm)
-input string  Time_End_3     = "";     // Khung gio 3 Ket thuc (HH:mm)
+input int     LocalGMT       = 7;      // GMT may chay MT5 (VN la GMT+7)
+input bool    Session_Asia   = true;   // Sydney - Tokyo (Phiên Á: 05:00 - 14:00)
+input bool    Session_London = true;   // London (Phiên Âu: 14:00 - 23:00)
+input bool    Session_NY     = true;   // New York (Phiên Mỹ: 19:00 - 04:00)
+input string  Time_Start_1   = "";     // Khung giờ 1 Bắt đầu (HH:mm)
+input string  Time_End_1     = "";     // Khung giờ 1 Kết thúc (HH:mm)
+input string  Time_Start_2   = "";     // Khung giờ 2 Bắt đầu (HH:mm)
+input string  Time_End_2     = "";     // Khung giờ 2 Kết thúc (HH:mm)
+input string  Time_Start_3   = "";     // Khung giờ 3 Bắt đầu (HH:mm)
+input string  Time_End_3     = "";     // Khung giờ 3 Kết thúc (HH:mm)
+input int     StartHourLocal = 6;      // Gio bat dau chay theo gio VN (fallback)
+input int     EndHourLocal   = 4;      // Gio ket thuc chay theo gio VN (fallback)
+input int     MinBeforeClose = 60;     // Phut truoc EndHour: giu basket, khong mo L1 / them lenh
 
-input string  _Close         = "=== MARKET CLOSE PROTECTION ===";
-input int     MinBeforeClose = 60;     // Phut truoc EndHour: giu basket, khong mo L1/them lenh
-input int     CloseProtect_MaxOrders = 8; // <=N lenh: dong ngay | >N lenh: giu basket cho co loi roi dong
-input bool    AllowGridNearEnd = false;   // true = cho phep nhoi lenh tiep khi >8 lenh de keo TP | false = ngat nhoi lenh
+input string  _CloseProtect  = "=== CLOSE PROTECTION ===";
+input bool    AllowGridNearEnd = false; // true=cho phep nhoi lenh khi > 8 lenh sat phien | false=ngat nhoi
+input int     ConfirmFromOrder = 10;   // Tu lenh thu N tro di can xac nhan 2 lan (cham trigger -> vuot qua -> hoi lai moi vao)
 
-input string  _Confirm       = "=== DOUBLE CONFIRM (tu L10 tro di) ===";
-input int     ConfirmFromOrder = 10;   // Tu lenh thu N tro di can xac nhan 2 lan
-
-input string  _PairClose     = "=== PAIR CLOSE (chot cap 2 lenh cuoi) ===";
-input bool    PairClose_BatTat       = false;  // Bat/tat chuc nang
-input int     PairClose_TuLenh       = 9;      // Bat dau tu lenh thu N tro di
-input double  PairClose_SoUSD        = 2.0;    // Chot khi profit(LN-1) + profit(LN) >= SoUSD ($)
-input bool    PairClose_ChotDanVe    = false;  // true=chot lien tiep nhieu cap trong 1 tick (chot dan ve)
+input string  _PairClose          = "=== PAIR CLOSE (CHOT CAT TIA) ===";
+input bool    PairClose_BatTat    = false; // Bat/tat chot cap cat tia
+input int     PairClose_TuLenh    = 9;     // Bat dau xet chot cap tu lenh thu N
+input double  PairClose_SoUSD     = 2.0;   // Tong profit 2 lenh >= SoUSD moi chot
+input bool    PairClose_ChotDanVe = false; // true=chot lien tiep nhieu cap trong 1 tick (chot dan ve)
 
 input string  _BasketPct          = "=== BASKET TP % FILTER ===";
 input double  Basket_TP_PhanTram  = 0;  // 0=tat | >0: chot khi profit vuot X%_TP, keo ve duoi X%_TP, roi tang lai >= X%_TP
@@ -177,30 +169,32 @@ int OnInit()
    PrintFormat("v33 Cloud Init | pip=%.5f | RSI=%s(%d) | TP=%s | TimeFilter=%s | %02d:00-%02d:00 GMT+%d | ConfirmFrom=L%d | CloseProtectMaxOrders=%d | AllowGridNearEnd=%s",
                PipSize, EnumToString(RSI_TF), RSI_Period,
                In_TP_Mode==0?StringFormat("%.0fPip",In_TP_Pips):StringFormat("$%.2f",In_TP_USD),
-               In_UseTimeFilter?"ON":"OFF(24/7)",
-               In_StartHourLocal, In_EndHourLocal, LocalGMT,
-               In_ConfirmFromOrder, CloseProtect_MaxOrders,
-               In_AllowGridNearEnd?"YES":"NO");
+               In_UseTimeFilter?"ON":"OFF", In_StartHourLocal, In_EndHourLocal, LocalGMT,
+               In_ConfirmFromOrder, In_Max_Orders, In_AllowGridNearEnd?"YES":"NO");
    return INIT_SUCCEEDED;
 }
 
-void OnDeinit(const int reason) { IndicatorRelease(hRSI); }
+//+------------------------------------------------------------------+
+void OnDeinit(const int reason)
+{
+   IndicatorRelease(hRSI);
+   Comment("");
+}
 
 //+------------------------------------------------------------------+
 int GetLocalHour()
 {
-   datetime now = TimeCurrent();
-   MqlDateTime dt; TimeToStruct(now, dt);
-   int lh = dt.hour + (LocalGMT - ServerGMT);
-   if(lh >= 24) lh -= 24;
-   if(lh < 0)   lh += 24;
-   return lh;
+   int diff_hours = LocalGMT - ServerGMT;
+   datetime now_local = TimeCurrent() + (datetime)(diff_hours * 3600);
+   MqlDateTime dt; TimeToStruct(now_local, dt);
+   return dt.hour;
 }
 
 int GetLocalMinute()
 {
-   datetime now = TimeCurrent();
-   MqlDateTime dt; TimeToStruct(now, dt);
+   int diff_hours = LocalGMT - ServerGMT;
+   datetime now_local = TimeCurrent() + (datetime)(diff_hours * 3600);
+   MqlDateTime dt; TimeToStruct(now_local, dt);
    return dt.min;
 }
 
@@ -271,12 +265,12 @@ bool CheckMinuteInAnyTradingWindow(int cur_min)
    int e3 = ParseTimeToMinutes(In_Time_End_3);
    if(s3 >= 0 && e3 >= 0 && IsMinuteInRange(cur_min, s3, e3)) return true;
 
-   // 3. Fallback cho tài khoản cũ nếu không chọn phiên nào và không nhập khung giờ nào
-   if(!In_Session_Asia && !In_Session_London && !In_Session_NY &&
-      (s1 < 0 || e1 < 0) && (s2 < 0 || e2 < 0) && (s3 < 0 || e3 < 0))
+   // 3. Fallback cho tài khoản cũ nếu không chọn phiên nào
+   if(!In_Session_Asia && !In_Session_London && !In_Session_NY && s1 < 0 && s2 < 0 && s3 < 0)
    {
-      if(In_StartHourLocal != In_EndHourLocal)
-         return IsMinuteInRange(cur_min, In_StartHourLocal * 60, In_EndHourLocal * 60);
+      int start_m = In_StartHourLocal * 60;
+      int end_m   = In_EndHourLocal * 60;
+      return IsMinuteInRange(cur_min, start_m, end_m);
    }
 
    return false;
@@ -292,52 +286,6 @@ bool IsInTradingHours()
    return CheckMinuteInAnyTradingWindow(lh * 60 + lm);
 }
 
-/* bool Old_Unused_Hours()
-{
-   return false;
-}
-
-// RemovedBlock1 
-{
-   // unused
-   else
-   // unused
-}
-
-bool IsNearTradingEnd()
-{
-   if(!In_UseTimeFilter) return false;
-   if(IsWeekend()) return false;
-
-   int lh = GetLocalHour();
-   int lm = GetLocalMinute();
-   return CheckMinuteInAnyTradingWindow(lh * 60 + lm);
-}
-
-/* bool Old_Unused_Hours()
-{
-   int lm = GetLocalMinute();
-   int now_mins = lh * 60 + lm;
-   int end_mins = In_EndHourLocal * 60;
-
-   int diff_mins;
-   if(In_StartHourLocal > In_EndHourLocal && lh >= In_StartHourLocal)
-   {
-      diff_mins = (1440 - now_mins) + end_mins;
-   }
-   else
-   {
-      diff_mins = end_mins - now_mins;
-   }
-//
-   }
-
-   return false;
-}
-
-*/
-
-//--- HÀM BẢO VỆ SÁT PHIÊN ĐÓNG CỬA
 bool IsNearTradingEnd()
 {
    if(!In_UseTimeFilter) return false;
@@ -348,41 +296,15 @@ bool IsNearTradingEnd()
    int lm = GetLocalMinute();
    int cur_min = lh * 60 + lm;
 
-   if(!CheckMinuteInAnyTradingWindow(cur_min)) return false;
-
-   int future_min = (cur_min + In_MinBeforeClose) % 1440;
-   return !CheckMinuteInAnyTradingWindow(future_min);
-}
-
-//--- HÀM TÍNH THỜI GIAN MỞ CỬA PHIÊN TIẾP THEO
-datetime CalcNextOpenTime()
-{
-   int diff_hours = LocalGMT - ServerGMT;
-   datetime now_local = TimeCurrent() + (datetime)(diff_hours * 3600);
-   datetime check_local = now_local + 60;
-   check_local = check_local - (check_local % 60);
-
-   for(int m = 0; m < 7 * 1440; m++)
+   // Hiện tại đang trong giờ giao dịch, kiểm tra xem sau In_MinBeforeClose phút nữa có bị ra ngoài giờ giao dịch không
+   if(CheckMinuteInAnyTradingWindow(cur_min))
    {
-      MqlDateTime dt;
-      TimeToStruct(check_local, dt);
-      ENUM_DAY_OF_WEEK dow = (ENUM_DAY_OF_WEEK)dt.day_of_week;
-      if(dow != SATURDAY && dow != SUNDAY)
-      {
-         int cur_min = dt.hour * 60 + dt.min;
-         if(CheckMinuteInAnyTradingWindow(cur_min))
-         {
-            PrintFormat("CalcNextOpenTime: mo lai %s (local)", TimeToString(check_local, TIME_DATE|TIME_MINUTES));
-            return check_local - (datetime)(diff_hours * 3600);
-         }
-      }
-      check_local += 60;
+      int future_min = (cur_min + In_MinBeforeClose) % 1440;
+      if(!CheckMinuteInAnyTradingWindow(future_min))
+         return true; // Sắp đóng phiên
    }
-   return TimeCurrent() + 3600;
-}
 
-/* OldUnusedCode
-{
+   return false;
 }
 
 datetime CalcNextOpenTime()
@@ -392,32 +314,23 @@ datetime CalcNextOpenTime()
    MqlDateTime dt; TimeToStruct(now_local, dt);
    datetime midnight_local = now_local - (datetime)(dt.hour*3600 + dt.min*60 + dt.sec);
 
-   datetime open_today_local = midnight_local + (datetime)(In_StartHourLocal * 3600);
-   if(now_local < open_today_local)
+   // Quét tìm phút mở cửa tiếp theo trong 48 giờ tới
+   int cur_min = dt.hour * 60 + dt.min;
+   for(int m = 1; m <= 2880; m++)
    {
-      MqlDateTime tdt; TimeToStruct(open_today_local, tdt);
-      ENUM_DAY_OF_WEEK tdow = (ENUM_DAY_OF_WEEK)tdt.day_of_week;
-      datetime target_local = open_today_local;
-      if(tdow == SATURDAY) target_local += 2*86400;
-      if(tdow == SUNDAY)   target_local += 1*86400;
-      PrintFormat("CalcNextOpenTime: mo lai %s (local)", TimeToString(target_local, TIME_DATE|TIME_MINUTES));
-      return target_local - (datetime)(diff_hours * 3600);
+      datetime t_scan = now_local + (datetime)(m * 60);
+      MqlDateTime dt_scan; TimeToStruct(t_scan, dt_scan);
+      if(dt_scan.day_of_week == SATURDAY || dt_scan.day_of_week == SUNDAY) continue;
+      
+      int scan_min = dt_scan.hour * 60 + dt_scan.min;
+      if(CheckMinuteInAnyTradingWindow(scan_min))
+      {
+         return t_scan - (datetime)(diff_hours * 3600);
+      }
    }
 
-   datetime next_local = midnight_local + 86400;
-   MqlDateTime ndt; TimeToStruct(next_local, ndt);
-   ENUM_DAY_OF_WEEK ndow = (ENUM_DAY_OF_WEEK)ndt.day_of_week;
-   if(ndow == SATURDAY) next_local += 2*86400;
-   if(ndow == SUNDAY)   next_local += 1*86400;
-
-   datetime open_local = next_local + (datetime)(In_StartHourLocal * 3600);
-   PrintFormat("CalcNextOpenTime: mo lai %s (local)", TimeToString(open_local, TIME_DATE|TIME_MINUTES));
-   return open_local - (datetime)(diff_hours * 3600);
+   return TimeCurrent() + 3600;
 }
-
-}
-
-*/
 
 double GetStep(int order_num)
 {
@@ -556,354 +469,184 @@ double CalcTargetUSD()
    if(netLot < SymbolInfoDouble(_Symbol, SYMBOL_VOLUME_MIN)) netLot = MathMax(buyLot, sellLot);
    double tickVal  = SymbolInfoDouble(_Symbol, SYMBOL_TRADE_TICK_VALUE);
    double tickSize = SymbolInfoDouble(_Symbol, SYMBOL_TRADE_TICK_SIZE);
-   return netLot * (In_TP_Pips * PipSize / tickSize) * tickVal;
+   if(tickSize <= 0) tickSize = _Point;
+   double pointVal = (tickVal / tickSize) * _Point;
+   return In_TP_Pips * PipSize * pointVal * netLot;
+}
+
+bool CheckDoubleConfirm(int order_num, int next_type, double trigger)
+{
+   double price = (next_type == POSITION_TYPE_BUY) ? SymbolInfoDouble(_Symbol, SYMBOL_ASK) : SymbolInfoDouble(_Symbol, SYMBOL_BID);
+   bool hit = (next_type == POSITION_TYPE_BUY) ? (NormalizeDouble(price, _Digits) >= trigger) : (NormalizeDouble(price, _Digits) <= trigger);
+   
+   if(DblConfirmNum != order_num)
+   {
+      DblConfirmNum   = order_num;
+      DblConfirmHit1  = false;
+      DblConfirmReady = false;
+   }
+   
+   if(!DblConfirmHit1)
+   {
+      if(hit) { DblConfirmHit1 = true; }
+      return false;
+   }
+   else
+   {
+      if(!DblConfirmReady)
+      {
+         bool pulled_back = (next_type == POSITION_TYPE_BUY) ? (NormalizeDouble(price, _Digits) < trigger) : (NormalizeDouble(price, _Digits) > trigger);
+         if(pulled_back) { DblConfirmReady = true; }
+         return false;
+      }
+      else
+      {
+         if(hit)
+         {
+            DblConfirmHit1  = false;
+            DblConfirmReady = false;
+            return true;
+         }
+      }
+   }
+   return false;
+}
+
+bool TrySendOrder(bool isBuy, double lot, int order_num)
+{
+   if(order_num == LastSentCount && LastSentOrder > 0)
+   {
+      if(OrderStillOpen(LastSentOrder)) return false;
+      if(TimeCurrent() - LastSentTime < ConfirmWait) return false;
+   }
+
+   string cmt = StringFormat("v33 #%d", order_num);
+   bool res = false;
+   if(isBuy) res = trade.Buy(lot, _Symbol, 0, 0, 0, cmt);
+   else      res = trade.Sell(lot, _Symbol, 0, 0, 0, cmt);
+
+   if(res)
+   {
+      LastSentOrder = trade.ResultOrder();
+      LastSentTime  = TimeCurrent();
+      LastSentCount = order_num;
+      return true;
+   }
+   return false;
+}
+
+bool ClosePositionVerified(ulong ticket)
+{
+   if(!PositionSelectByTicket(ticket)) return true;
+   return trade.PositionClose(ticket);
 }
 
 void CloseBasket()
 {
-   for(int i = PositionsTotal()-1; i >= 0; i--)
+   for(int i = PositionsTotal() - 1; i >= 0; i--)
    {
       ulong t = PositionGetTicket(i);
       if(!t) continue;
       if((ulong)PositionGetInteger(POSITION_MAGIC) != In_Magic) continue;
       if(PositionGetString(POSITION_SYMBOL) != _Symbol) continue;
-      trade.PositionClose(t);
+      ClosePositionVerified(t);
    }
-   OrderCount=0; FirstPrice=0; FirstType=-1;
-   LastSentOrder=0; LastSentTime=0; LastSentCount=0;
-   DblConfirmNum=0; DblConfirmHit1=false; DblConfirmReady=false;
-   TP_TrailState=0;
-   CloseProtect_WaitProfit=false;
+   RestoreState();
 }
 
-bool GetTwoLatestTickets(ulong &t1, ulong &t2)
+bool GetTwoLatestTickets(ulong &tk1, ulong &tk2)
 {
-   struct PosInfo { ulong ticket; datetime time; };
-   PosInfo arr[];
-   int cnt = 0;
+   tk1 = 0; tk2 = 0;
+   datetime t1 = 0, t2 = 0;
    for(int i = 0; i < PositionsTotal(); i++)
    {
       ulong t = PositionGetTicket(i);
       if(!t) continue;
       if((ulong)PositionGetInteger(POSITION_MAGIC) != In_Magic) continue;
       if(PositionGetString(POSITION_SYMBOL) != _Symbol) continue;
-      ArrayResize(arr, cnt+1);
-      arr[cnt].ticket = t;
-      arr[cnt].time   = (datetime)PositionGetInteger(POSITION_TIME);
-      cnt++;
+      datetime pt = (datetime)PositionGetInteger(POSITION_TIME);
+      if(pt > t1)
+      {
+         t2 = t1; tk2 = tk1;
+         t1 = pt; tk1 = t;
+      }
+      else if(pt > t2)
+      {
+         t2 = pt; tk2 = t;
+      }
    }
-   if(cnt < 2) return false;
-   for(int i = 0; i < cnt-1; i++)
-      for(int j = i+1; j < cnt; j++)
-         if(arr[j].time < arr[i].time)
-         {
-            PosInfo tmp = arr[i]; arr[i]=arr[j]; arr[j]=tmp;
-         }
-   t1 = arr[cnt-2].ticket; 
-   t2 = arr[cnt-1].ticket; 
-   return true;
+   return (tk1 > 0 && tk2 > 0);
 }
 
-double CalcTwoProfitUSD(ulong t1, ulong t2)
+bool CheckPairClose(ulong tk1, ulong tk2, double target_usd)
 {
    double p = 0;
-   ulong ts[2]; ts[0]=t1; ts[1]=t2;
-   for(int k=0;k<2;k++)
-   {
-      for(int i=0;i<PositionsTotal();i++)
-      {
-         ulong t = PositionGetTicket(i);
-         if(!t) continue;
-         if((ulong)PositionGetInteger(POSITION_IDENTIFIER) != ts[k]) continue;
-         p += PositionGetDouble(POSITION_PROFIT) + PositionGetDouble(POSITION_SWAP);
-         break;
-      }
-   }
-   return p;
+   if(PositionSelectByTicket(tk1)) p += PositionGetDouble(POSITION_PROFIT) + PositionGetDouble(POSITION_SWAP);
+   if(PositionSelectByTicket(tk2)) p += PositionGetDouble(POSITION_PROFIT) + PositionGetDouble(POSITION_SWAP);
+   return (p >= target_usd);
 }
 
-bool CheckPairClose(ulong t1, ulong t2, double soUSD)
+void CloseTwoLatest(ulong tk1, ulong tk2)
 {
-   double profit1=0, profit2=0;
-   for(int i=0;i<PositionsTotal();i++)
-   {
-      ulong t = PositionGetTicket(i);
-      if(!t) continue;
-      ulong id = (ulong)PositionGetInteger(POSITION_IDENTIFIER);
-      if(id == t1) profit1 = PositionGetDouble(POSITION_PROFIT) + PositionGetDouble(POSITION_SWAP);
-      if(id == t2) profit2 = PositionGetDouble(POSITION_PROFIT) + PositionGetDouble(POSITION_SWAP);
-   }
-   double total = profit1 + profit2;
-   return (total >= soUSD);
-}
-
-void CloseTwoLatest(ulong t1, ulong t2)
-{
-   trade.PositionClose(t2);
-   trade.PositionClose(t1);
-   int real = CountPositions();
-   OrderCount = real;
-   if(real == 0) { FirstPrice=0; FirstType=-1; }
-   LastSentOrder=0; LastSentTime=0; LastSentCount=real;
-   DblConfirmNum=0; DblConfirmHit1=false; DblConfirmReady=false;
-}
-
-bool TrySendOrder(bool is_buy, double lot, int expected_count)
-{
-   if(LastSentCount == expected_count)
-   {
-      if(LastSentOrder > 0 && OrderStillOpen(LastSentOrder)) return false;
-      int real = CountPositions();
-      if(real >= expected_count)
-      {
-         PrintFormat("Guard: real=%d >= expected=%d, skip", real, expected_count);
-         return false;
-      }
-      if(TimeCurrent() - LastSentTime < ConfirmWait) return false;
-      PrintFormat("Timeout %ds, retry #%d", ConfirmWait, expected_count);
-      LastSentOrder = 0;
-   }
-
-   int real_now = CountPositions();
-   if(real_now >= expected_count)
-   {
-      PrintFormat("Pre-check: real=%d >= expected=%d, skip", real_now, expected_count);
-      LastSentCount = expected_count;
-      return false;
-   }
-
-   bool ok = is_buy ? trade.Buy(lot, _Symbol) : trade.Sell(lot, _Symbol);
-   if(!ok) { PrintFormat("Send failed: %s", trade.ResultComment()); return false; }
-
-   uint rc = trade.ResultRetcode();
-   if(rc == TRADE_RETCODE_DONE || rc == TRADE_RETCODE_DONE_PARTIAL)
-   {
-      LastSentOrder = trade.ResultOrder();
-      LastSentTime  = TimeCurrent();
-      LastSentCount = expected_count;
-      PrintFormat("Sent OK order=%llu rc=%d lot=%.2f", LastSentOrder, rc, lot);
-      return true;
-   }
-   else if(rc == TRADE_RETCODE_PLACED)
-   {
-      LastSentOrder = trade.ResultOrder();
-      LastSentTime  = TimeCurrent();
-      LastSentCount = expected_count;
-      PrintFormat("Placed order=%llu, waiting...", LastSentOrder);
-      return false;
-   }
-   else
-   {
-      PrintFormat("%s err rc=%d: %s", is_buy?"BUY":"SELL", rc, trade.ResultComment());
-      return false;
-   }
-}
-
-//+------------------------------------------------------------------+
-// DOUBLE CONFIRM v33: Kiểm tra ở MỌI TICK
-//+------------------------------------------------------------------+
-bool CheckDoubleConfirm(int next_num, int next_type, double trigger)
-{
-   double bid = SymbolInfoDouble(_Symbol, SYMBOL_BID);
-   double ask = SymbolInfoDouble(_Symbol, SYMBOL_ASK);
-
-   if(DblConfirmNum != next_num)
-   {
-      DblConfirmNum=next_num; DblConfirmHit1=false; DblConfirmReady=false;
-      PrintFormat("DblConfirm START #%d | ConfirmFromOrder=%d | trigger=%.2f",
-                  next_num, In_ConfirmFromOrder, trigger);
-   }
-
-   bool hit;
-   if(next_type == POSITION_TYPE_BUY)
-      hit = NormalizeDouble(ask, _Digits) >= trigger;
-   else
-      hit = NormalizeDouble(bid, _Digits) <= trigger;
-
-   if(!DblConfirmHit1)
-   {
-      if(hit)
-      {
-         DblConfirmHit1  = true;
-         DblConfirmReady = false;
-         PrintFormat("DblConfirm 1/2 #%d | cham trigger=%.2f %s=%.2f | cho gia roi ra...",
-                     next_num, trigger,
-                     next_type==POSITION_TYPE_BUY?"ask":"bid",
-                     next_type==POSITION_TYPE_BUY?ask:bid);
-      }
-      return false;
-   }
-
-   if(!DblConfirmReady)
-   {
-      if(!hit)
-      {
-         DblConfirmReady = true;
-         PrintFormat("DblConfirm READY #%d | gia roi khoi trigger=%.2f | cho cham lai...",
-                     next_num, trigger);
-      }
-      return false; 
-   }
-
-   if(!hit) return false;
-
-   PrintFormat("DblConfirm 2/2 PASS #%d | trigger=%.2f %s=%.2f -> DAT LENH",
-               next_num, trigger,
-               next_type==POSITION_TYPE_BUY?"ask":"bid",
-               next_type==POSITION_TYPE_BUY?ask:bid);
-   DblConfirmNum=0; DblConfirmHit1=false; DblConfirmReady=false;
-   return true;
-}
-
-//+------------------------------------------------------------------+
-// XỬ LÝ 60 PHÚT CUỐI PHIÊN (MARKET CLOSE PROTECTION) v33
-//+------------------------------------------------------------------+
-void XuLy60PhutCuoiPhien(int total)
-{
-   if(!IsNearTradingEnd()) return;
-   if(total <= 0) return;
-
-   // TRƯỜNG HỢP 1: TỔNG SỐ LỆNH <= 8 -> ĐÓNG TẤT CẢ TỰ ĐỘNG ĐỂ NGHỈ PHIÊN
-   if(total <= CloseProtect_MaxOrders)
-   {
-      PrintFormat("=== 60 PHUT CUOI PHIEN | total=%d <= %d | DONG TAT CA NGAY ===",
-                  total, CloseProtect_MaxOrders);
-      CloseBasket();
-      WaitNextSession = true;
-      WaitUntilTime   = CalcNextOpenTime();
-      PrintFormat("=== Cho den phien moi: %s (server) ===",
-                  TimeToString(WaitUntilTime, TIME_DATE|TIME_MINUTES));
-      return;
-   }
-
-   // TRƯỜNG HỢP 2: TỔNG SỐ LỆNH > 8 (GỒNG LƯỚI SÂU)
-   double profit = BasketProfit();
-
-   // Kịch bản A: Giỏ lệnh có lãi -> Tất toán cắt sạch nghỉ phiên
-   if(profit > 0)
-   {
-      PrintFormat("=== 60 PHUT CUOI PHIEN | total=%d > %d | profit=$%.2f > 0 | DONG CA BASKET ===",
-                  total, CloseProtect_MaxOrders, profit);
-      CloseBasket();
-      WaitNextSession = true;
-      WaitUntilTime   = CalcNextOpenTime();
-      PrintFormat("=== Cho den phien moi: %s (server) ===",
-                  TimeToString(WaitUntilTime, TIME_DATE|TIME_MINUTES));
-      return;
-   }
-
-   // Kịch bản B: Theo lựa chọn từ Web (In_AllowGridNearEnd)
-   if(In_AllowGridNearEnd)
-   {
-      CloseProtect_WaitProfit = false;
-      static datetime last_log_allow = 0;
-      if(TimeCurrent() - last_log_allow > 300)
-      {
-         PrintFormat("=== 60 PHUT CUOI PHIEN | total=%d > %d | profit=$%.2f <= 0 | CHO PHEP NHOI LENH TIEP ĐỂ KEO TP ===",
-                     total, CloseProtect_MaxOrders, profit);
-         last_log_allow = TimeCurrent();
-      }
-   }
-   else
-   {
-      CloseProtect_WaitProfit = true;
-      static datetime last_log2 = 0;
-      if(TimeCurrent() - last_log2 > 300)
-      {
-         PrintFormat("=== 60 PHUT CUOI PHIEN | total=%d > %d | profit=$%.2f <= 0 | GIU, KHONG MO THEM, CHO CO LOI ===",
-                     total, CloseProtect_MaxOrders, profit);
-         last_log2 = TimeCurrent();
-      }
-   }
+   ClosePositionVerified(tk1);
+   ClosePositionVerified(tk2);
+   RestoreState();
 }
 
 //+------------------------------------------------------------------+
 void OnTick()
 {
-   // 1. CHU KỲ KIỂM TRA ĐỒNG BỘ API (Định kỳ 60 giây)
-   if(TimeCurrent() - LastApiSyncTime >= 60) {
-      IsApiAllowed = SyncSettingsFromCloud();
+   if(TimeCurrent() - LastApiSyncTime >= 60)
+   {
       LastApiSyncTime = TimeCurrent();
+      IsApiAllowed = SyncSettingsFromCloud();
    }
+   if(!IsApiAllowed) return;
 
-   if(!IsApiAllowed) {
-      return; 
-   }
+   int total = CountPositions();
 
    if(WaitNextSession)
    {
-      if(TimeCurrent() >= WaitUntilTime && IsInTradingHours())
+      if(total == 0)
+      {
+         if(TimeCurrent() < WaitUntilTime) return;
+         WaitNextSession = false;
+      }
+      else
       {
          WaitNextSession = false;
-         CloseProtect_WaitProfit = false;
-         PrintFormat("=== Bot hoat dong tro lai | Local=%02d:%02d GMT+%d | %s ===",
-                     GetLocalHour(), GetLocalMinute(), LocalGMT,
-                     EnumToString(GetLocalDayOfWeek()));
       }
-      else return;
    }
-
-   if(IsWeekend()) return;
 
    bool in_hours = IsInTradingHours();
    bool near_end = IsNearTradingEnd();
 
-   int total = CountPositions();
-   OrderCount = total;
-
-   if(!near_end && CloseProtect_WaitProfit)
-      CloseProtect_WaitProfit = false;
-
-   // ── MARKET CLOSE PROTECTION (60 phut cuoi phien) ──
-   XuLy60PhutCuoiPhien(total);
-   if(WaitNextSession) return;
-
-   // ── KHÔNG MỞ LỆNH MỚI NẾU HẾT GIỜ HOẶC ĐANG SÁT PHIÊN KHÔNG CÓ LỆNH ──
+   // Khi total == 0: vào lệnh L1 theo tín hiệu RSI
    if(total == 0)
    {
-      FirstPrice=0; FirstType=-1;
+      if(!in_hours || near_end) return;
 
-      if(!in_hours || near_end)
-      {
-         static datetime last_log = 0;
-         if(TimeCurrent() - last_log > 300)
-         {
-            PrintFormat("No L1 | local=%02d:%02d | in_hours=%s near_end=%s",
-                        GetLocalHour(), GetLocalMinute(),
-                        in_hours?"Y":"N", near_end?"Y":"N");
-            last_log = TimeCurrent();
-         }
-         return;
-      }
-
-      if(CopyBuffer(hRSI, 0, 1, 1, rsiVal) <= 0) return;
+      if(CopyBuffer(hRSI, 0, 0, 2, rsiVal) <= 0) return;
       double rsi = rsiVal[0];
-      bool isBuy  = (rsi >= 0 && rsi <= 30) || (rsi > 50 && rsi <= 70);
-      bool isSell = (rsi > 30 && rsi <= 50) || (rsi > 70 && rsi <= 100);
-      if(!isBuy && !isSell) return;
 
-      double lot = CalcLot(0);
-      if(!TrySendOrder(isBuy, lot, 1)) return;
+      int openType = -1;
+      if(rsi < 30) openType = POSITION_TYPE_BUY;
+      else if(rsi > 70) openType = POSITION_TYPE_SELL;
 
-      TP_TrailState = 0;
-      FirstPrice = trade.ResultPrice();
-      if(FirstPrice == 0) FirstPrice = isBuy ? SymbolInfoDouble(_Symbol, SYMBOL_ASK)
-                                             : SymbolInfoDouble(_Symbol, SYMBOL_BID);
-      FirstType  = isBuy ? POSITION_TYPE_BUY : POSITION_TYPE_SELL;
-      OrderCount = 1;
-      PrintFormat("=== L1 %s @ %.2f lot=%.2f RSI=%.1f | local=%02d:%02d ===",
-                  isBuy?"BUY":"SELL", FirstPrice, lot, rsi,
-                  GetLocalHour(), GetLocalMinute());
+      if(openType >= 0)
+      {
+         double lot = In_Initial_Lot;
+         if(TrySendOrder(openType == POSITION_TYPE_BUY, lot, 1))
+         {
+            RestoreState();
+            PrintFormat("L1 OPEN | Type=%s | Lot=%.2f | RSI=%.2f",
+                        openType == POSITION_TYPE_BUY ? "BUY" : "SELL", lot, rsi);
+         }
+      }
       return;
    }
 
-   if(FirstPrice == 0)
-   {
-      GetFirstPosition(FirstPrice, FirstType);
-      if(FirstPrice == 0) return;
-   }
-
-   // ── PAIR CLOSE ──────────────────────────
+   // ── PAIR CLOSE (CHỐT CẶP CẮT TỈA) ──
    if(In_PairClose_BatTat && total >= In_PairClose_TuLenh)
    {
       bool da_chot = false;
@@ -997,7 +740,7 @@ void OnTick()
       }
    }
 
-   // ── SỬA ĐỔI QUAN TRỌNG TẠI ĐÂY: KHÔNG CHẶN NHỒI NẾU ĐƯỢC PHÉP ──
+   // ── NHỒI LỆNH GRID ──
    if(!in_hours) return;
    if(near_end && (!In_AllowGridNearEnd || CloseProtect_WaitProfit)) return;
    if(total >= In_Max_Orders) return;

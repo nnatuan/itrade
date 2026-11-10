@@ -10,3 +10,6 @@
    - Coi thư mục hiện tại đang mở là thư mục gốc (root) duy nhất của workspace.
    - Không giải mã (resolve) ngược đường dẫn thực tế hay truy vết ra các thư mục cha bên ngoài workspace.
    - Các Subagent (như Codebase Researcher) chỉ được tìm kiếm trực tiếp trong các file mã nguồn của dự án (PHP, JS, CSS, HTML, SQL).
+5. **Quy tắc cấu trúc Database & Migration:**
+   - Tuyệt đối không viết code kiểm tra sự tồn tại của bảng hoặc cột (`table_exists`, `field_exists`, `SHOW TABLES`, `SHOW COLUMNS`...) lồng bên trong các hàm nghiệp vụ, controller hay model trước khi thực thi `INSERT`/`UPDATE`.
+   - Nếu cần tạo bảng mới, bổ sung trường hoặc thay đổi cấu trúc dữ liệu: Luôn xuất mã SQL thuần (`CREATE TABLE`, `ALTER TABLE`...) trực tiếp trong phản hồi để người dùng chủ động chạy query thủ công, giữ code backend gọn gàng và tối ưu hiệu năng.
