@@ -12,4 +12,4 @@ RewriteRule ^(.*)$ index.php?$1 [L]
  RewriteRule  .  %{REQUEST_URI}?   [R=301,L]
 </if>
 
-DirectoryIndex loading.html index.php
+DirectoryIndex index.php

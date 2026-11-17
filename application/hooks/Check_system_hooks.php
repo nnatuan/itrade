@@ -1,5 +1,6 @@
 <?php 
 defined('BASEPATH') OR exit('No direct script access allowed');
+#[\AllowDynamicProperties]
 class Check_system_hooks extends CI_Controller { 
 /**
 * Constructor

@@ -1,7 +1,16 @@
 	<!-- footer content -->
         <footer>
-          <div class="pull-right">
-            HỆ THỐNG QUẢN TRỊ NỘI DUNG - CMS
+          <div style="font-size: 12px; color: #64748b; line-height: 1.65; text-align: justify; padding: 12px 18px; background: #ffffff; border: 1px solid #e2e8f0; border-radius: 8px; margin-top: 10px; box-shadow: 0 1px 3px rgba(0,0,0,0.02);">
+            <p style="margin-bottom: 8px; font-weight: 700; color: #0f172a; font-size: 13px; display: flex; align-items: center; gap: 6px;">
+              <span style="display: inline-block; width: 8px; height: 8px; background: #0ea5e9; border-radius: 50%;"></span>
+              2026 &copy; AIVEXI
+            </p>
+            <p style="margin-bottom: 8px;">
+              <strong style="color: #ea580c; font-weight: 700; letter-spacing: 0.2px;"><i class="fa fa-exclamation-triangle" style="margin-right: 4px;"></i>CẢNH BÁO RỦI RO:</strong> Giao dịch tài chính, bao gồm ngoại hối (Forex), CFD, tiền mã hóa và các sản phẩm có đòn bẩy, tiềm ẩn rủi ro cao và có thể không phù hợp với mọi nhà đầu tư. Bạn có thể mất một phần hoặc toàn bộ số vốn đã đầu tư. Kết quả trong quá khứ, backtest hay số liệu mô phỏng không đảm bảo lợi nhuận trong tương lai. Chỉ giao dịch bằng số tiền bạn có thể chấp nhận mất.
+            </p>
+            <p style="margin-bottom: 0;">
+              <strong style="color: #0284c7; font-weight: 700; letter-spacing: 0.2px;"><i class="fa fa-info-circle" style="margin-right: 4px;"></i>MIỄN TRỪ TRÁCH NHIỆM:</strong> AIVEXI chỉ cung cấp công cụ phần mềm và thông tin tham khảo, không phải lời khuyên đầu tư hay tư vấn tài chính. Người dùng tự chịu hoàn toàn trách nhiệm với quyết định giao dịch và cấu hình bot của mình. AIVEXI không chịu trách nhiệm cho bất kỳ tổn thất nào phát sinh từ việc sử dụng dịch vụ.
+            </p>
           </div>
           <div class="clearfix"></div>
         </footer>

@@ -185,7 +185,7 @@ function Fis_date($value)
   	{
 		$blnValid = TRUE;
    		// check the format first (may not be necessary as we use checkdate() below)
-   		if(!ereg ("^[0-9]{2}/[0-9]{2}/[0-9]{4}$", $value))
+   		if(!preg_match("/^[0-9]{2}\/[0-9]{2}\/[0-9]{4}$/", $value))
    		{
     		$blnValid = FALSE;
    		}

@@ -255,12 +255,20 @@
 
                     <div class="clearfix"></div>
                     
-                    <div class="qcare-login-footer">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="#64748b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width: 40px; height: 40px; margin-bottom: 8px;">
+                    <div class="qcare-login-footer" style="margin-top: 25px; padding-top: 15px; border-top: 1px solid #e2e8f0;">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="#0ea5e9" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width: 36px; height: 36px; margin-bottom: 8px;">
                             <path d="M3 3v18h18" />
                             <path d="M18.7 8l-5.1 5.2-2.8-2.7L7 14.3" />
                         </svg>
-                        <p>EA MATRIX CONTROL CENTER &copy; 2026</p>
+                        <p style="font-weight: 700; color: #0f172a; margin-bottom: 8px; font-size: 13px;">2026 &copy; AIVEXI</p>
+                        <div style="font-size: 11px; color: #64748b; line-height: 1.6; text-align: justify; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 6px; padding: 10px 12px;">
+                            <p style="margin-bottom: 6px;">
+                                <strong style="color: #ea580c; font-weight: 700;"><i class="fa fa-exclamation-triangle" style="margin-right: 3px;"></i>CẢNH BÁO RỦI RO:</strong> Giao dịch tài chính, bao gồm ngoại hối (Forex), CFD, tiền mã hóa và các sản phẩm có đòn bẩy, tiềm ẩn rủi ro cao và có thể không phù hợp với mọi nhà đầu tư. Chỉ giao dịch bằng số tiền bạn có thể chấp nhận mất.
+                            </p>
+                            <p style="margin-bottom: 0;">
+                                <strong style="color: #0284c7; font-weight: 700;"><i class="fa fa-info-circle" style="margin-right: 3px;"></i>MIỄN TRỪ TRÁCH NHIỆM:</strong> AIVEXI chỉ cung cấp công cụ phần mềm và thông tin tham khảo, không phải lời khuyên đầu tư hay tư vấn tài chính. Người dùng tự chịu hoàn toàn trách nhiệm với quyết định giao dịch và cấu hình bot của mình.
+                            </p>
+                        </div>
                     </div>
 
                     <input type="hidden" name="hidden_button" value="" />

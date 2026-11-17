@@ -1,8 +1,10 @@
 <?php
 if (!defined('BASEPATH'))
     exit('No direct script access allowed');
-$root = "https://" . $_SERVER['HTTP_HOST'];
-$root .= str_replace(basename($_SERVER['SCRIPT_NAME']), "", $_SERVER['SCRIPT_NAME']);
+$http_protocol = ((isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') || (isset($_SERVER['SERVER_PORT']) && $_SERVER['SERVER_PORT'] == 443) || (isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] === 'https')) ? 'https://' : 'http://';
+$http_host = isset($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : 'localhost';
+$script_name = isset($_SERVER['SCRIPT_NAME']) ? $_SERVER['SCRIPT_NAME'] : '';
+$root = $http_protocol . $http_host . str_replace(basename($script_name), '', $script_name);
 $config['base_url']                = "$root";
 $config['system_ap_admin_folder']  = 'admin/';
 $config['index_page']              = "index.php";

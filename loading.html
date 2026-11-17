@@ -2,6 +2,9 @@
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>EA HUB - Connecting to Cloud Control Center...</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
@@ -163,8 +166,9 @@
         const statusElement = document.getElementById("statusMessage");
         const splashContainer = document.getElementById("splashContainer");
 
-        // Địa chỉ trang đăng nhập Client đích danh của anh
-        const targetLoginUrl = "https://hethongso.com/itrade/index.php/do_login";
+        // Lay dia chi tuyet doi theo chinh ten mien trinh duyet dang mo
+        const currentPath = window.location.pathname.replace(/\/loading\.html.*$/i, '').replace(/\/index\.php.*$/i, '').replace(/\/$/, '');
+        const targetLoginUrl = window.location.protocol + "//" + window.location.host + currentPath + '/index.php/do_login';
 
         // Hàm chạy bộ đếm số và tiến trình chữ
         const loadingInterval = setInterval(() => {

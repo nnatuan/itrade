@@ -57,7 +57,7 @@
 								<label class="col-form-label col-md-2 col-sm-2 label-align" style="color: #26b99a; font-weight: bold;">Phiên bản Bot EA <span class="required">*</span></label>
 								<div class="col-md-3 col-sm-3">
 									<select name="cbof_cbot_version" id="cbof_cbot_version" class="form-control" style="border: 2px solid #26b99a; font-weight: bold; color: #16a085;">
-										<option value="Onefxhub_v38" <?php echo (isset($cbof_cbot_version) && $cbof_cbot_version == 'Onefxhub_v38') ? 'selected' : ''; ?>>Onefxhub V38.38 (RPA + Global Grid + T1/T2 + DD Lock)</option>
+										<option value="Onefxhub_v38" <?php echo (isset($cbof_cbot_version) && $cbof_cbot_version == 'Onefxhub_v38') ? 'selected' : ''; ?>>EA-AIVEXI</option>
 										<option value="RSI6_v33" <?php echo (isset($cbof_cbot_version) && $cbof_cbot_version == 'RSI6_v33') ? 'selected' : ''; ?>>Grid + Bảo vệ sát phiên (V33)</option>
 										<option value="RSI6_v32" <?php echo (isset($cbof_cbot_version) && $cbof_cbot_version == 'RSI6_v32') ? 'selected' : ''; ?>>Grid tiêu chuẩn (V32)</option>
 									</select>
@@ -352,17 +352,17 @@
                                     </div>
                                 </div>
 
-                                <h5 class="qcare-form-section-title section-blue"><i class="fa fa-shield"></i> III. T1/T2 CỤM LỆNH L2+ (pip, 1 giá = 10 pip)</h5>
+                                <h5 class="qcare-form-section-title section-blue"><i class="fa fa-shield"></i> SMART BASKET PROFIT PROTECTION | BẢO VỆ LỢI NHUẬN CỤM</h5>
                                 <div class="item form-group">
-                                    <label class="col-form-label col-md-2 col-sm-2 label-align">T1 kích hoạt / T2 đi tiếp (pip)</label>
+                                    <label class="col-form-label col-md-2 col-sm-2 label-align">Trigger | Ngưỡng kích hoạt bảo vệ TP (pip)</label>
                                     <div class="col-md-2 col-sm-2">
                                         <input type="number" step="0.1" name="fkhoang_doi_sl" value="<?php echo $fkhoang_doi_sl; ?>" class="form-control" placeholder="25.0">
                                     </div>
-                                    <label class="col-form-label col-md-2 col-sm-2 label-align">T1: Khóa BE cụm (pip)</label>
+                                    <label class="col-form-label col-md-2 col-sm-2 label-align">Profit Lock | Mức khóa lợi nhuận từ BE (Pip)</label>
                                     <div class="col-md-2 col-sm-2">
                                         <input type="number" step="0.1" name="fso_pip_doi_sl" value="<?php echo $fso_pip_doi_sl; ?>" class="form-control" placeholder="15.0">
                                     </div>
-                                    <label class="col-form-label col-md-2 col-sm-2 label-align">T2: Trailing SL theo giá (pip)</label>
+                                    <label class="col-form-label col-md-2 col-sm-2 label-align">Adaptive Trailing | Khoảng bám đuổi lợi nhuận (pip)</label>
                                     <div class="col-md-2 col-sm-2">
                                         <input type="number" step="0.1" name="fkhoang_trailing_sl" value="<?php echo $fkhoang_trailing_sl; ?>" class="form-control" placeholder="10.0">
                                     </div>
@@ -378,30 +378,25 @@
                                     <div class="col-md-2 col-sm-2">
                                         <input type="number" step="0.1" min="0" max="100" name="fcat_dd_phan_tram" value="<?php echo $fcat_dd_phan_tram; ?>" class="form-control" placeholder="0: Chưa đặt">
                                     </div>
-                                    <label class="col-form-label col-md-2 col-sm-2 label-align">Magic Hedge khóa DD</label>
-                                    <div class="col-md-2 col-sm-2">
-                                        <input type="text" name="ndd_hedge_magic" value="<?php echo $ndd_hedge_magic; ?>" class="form-control" oninput="this.value = this.value.replace(/[^0-9]/g, '');">
-                                    </div>
                                 </div>
 
-                                <h5 class="qcare-form-section-title section-teal"><i class="fa fa-line-chart"></i> V. TÍN HIỆU RSI VÀO L1 & MAGIC EA</h5>
-                                <div class="item form-group">
-                                    <label class="col-form-label col-md-2 col-sm-2 label-align">Chu kỳ RSI (phải >= 2)</label>
-                                    <div class="col-md-2 col-sm-2">
-                                        <input type="number" min="2" name="v38_txt_nrsi_period" value="<?php echo ($cbof_cbot_version == 'Onefxhub_v38') ? $txt_nrsi_period : '5'; ?>" class="form-control">
-                                    </div>
-                                    <label class="col-form-label col-md-1 col-sm-1 label-align">Khung RSI</label>
-                                    <div class="col-md-2 col-sm-2">
-                                        <select name="v38_cbof_crsi_tf" class="form-control">
-                                            <option value="PERIOD_M1" <?php echo ($cbof_crsi_tf == 'PERIOD_M1') ? 'selected' : ''; ?>>M1</option>
-                                            <option value="PERIOD_M5" <?php echo ($cbof_crsi_tf == 'PERIOD_M5') ? 'selected' : ''; ?>>M5</option>
-                                            <option value="PERIOD_M15" <?php echo ($cbof_crsi_tf == 'PERIOD_M15') ? 'selected' : ''; ?>>M15</option>
-                                            <option value="PERIOD_H1" <?php echo ($cbof_crsi_tf == 'PERIOD_H1') ? 'selected' : ''; ?>>H1</option>
-                                        </select>
-                                    </div>
-                                    <label class="col-form-label col-md-1 col-sm-1 label-align">Magic Num</label>
-                                    <div class="col-md-2 col-sm-2">
-                                        <input type="text" name="v38_txt_nmagic" value="<?php echo $txt_nmagic; ?>" class="form-control" oninput="this.value = this.value.replace(/[^0-9]/g, '');">
+                                <!-- ẨN PHẦN V. TÍN HIỆU RSI VÀO L1 THEO YÊU CẦU -->
+                                <div style="display: none;">
+                                    <h5 class="qcare-form-section-title section-teal"><i class="fa fa-line-chart"></i> V. TÍN HIỆU RSI VÀO L1</h5>
+                                    <div class="item form-group">
+                                        <label class="col-form-label col-md-2 col-sm-2 label-align">Chu kỳ RSI (phải >= 2)</label>
+                                        <div class="col-md-2 col-sm-2">
+                                            <input type="number" min="2" name="v38_txt_nrsi_period" value="<?php echo ($cbof_cbot_version == 'Onefxhub_v38') ? $txt_nrsi_period : '5'; ?>" class="form-control">
+                                        </div>
+                                        <label class="col-form-label col-md-2 col-sm-2 label-align">Khung RSI</label>
+                                        <div class="col-md-2 col-sm-2">
+                                            <select name="v38_cbof_crsi_tf" class="form-control">
+                                                <option value="PERIOD_M1" <?php echo ($cbof_crsi_tf == 'PERIOD_M1') ? 'selected' : ''; ?>>M1</option>
+                                                <option value="PERIOD_M5" <?php echo ($cbof_crsi_tf == 'PERIOD_M5') ? 'selected' : ''; ?>>M5</option>
+                                                <option value="PERIOD_M15" <?php echo ($cbof_crsi_tf == 'PERIOD_M15') ? 'selected' : ''; ?>>M15</option>
+                                                <option value="PERIOD_H1" <?php echo ($cbof_crsi_tf == 'PERIOD_H1') ? 'selected' : ''; ?>>H1</option>
+                                            </select>
+                                        </div>
                                     </div>
                                 </div>
 
@@ -522,9 +517,9 @@
                                     </div>
                                 </div>
 
-                                <h5 class="qcare-form-section-title" style="background: #9b59b6; color: #fff;"><i class="fa fa-hourglass-end"></i> VII. CHỐT PHIÊN VÀ XÁC NHẬN HAI LẦN</h5>
+                                <h5 class="qcare-form-section-title" style="background: #9b59b6; color: #fff;"><i class="fa fa-hourglass-end"></i> VII. CHỐT CUỐI PHIÊN VÀ AI CHECK</h5>
                                 <div class="item form-group">
-                                    <label class="col-form-label col-md-2 col-sm-2 label-align">Khóa mở L1 trước hết phiên</label>
+                                    <label class="col-form-label col-md-2 col-sm-2 label-align">Giờ Cho EA Off</label>
                                     <div class="col-md-2 col-sm-2">
                                         <div class="input-group">
                                             <input type="number" min="0" name="v38_txt_nmin_before_close" value="<?php echo ($cbof_cbot_version == 'Onefxhub_v38') ? $txt_nmin_before_close : '60'; ?>" class="form-control">
@@ -542,18 +537,18 @@
                                 </div>
 
                                 <div class="item form-group">
-                                    <label class="col-form-label col-md-2 col-sm-2 label-align">Ngưỡng lỗ % equity chu kỳ</label>
+                                    <label class="col-form-label col-md-2 col-sm-2 label-align">Ngưỡng % EA chốt nghỉ</label>
                                     <div class="col-md-2 col-sm-2">
                                         <div class="input-group">
                                             <input type="number" step="0.05" min="0.01" max="10" name="fclose_protect_loss_pct" value="<?php echo $fclose_protect_loss_pct; ?>" class="form-control" placeholder="0.3">
                                             <span class="input-group-addon" style="line-height:22px;padding:6px 10px;">%</span>
                                         </div>
                                     </div>
-                                    <label class="col-form-label col-md-2 col-sm-2 label-align">Bật xác nhận 2 lần</label>
+                                    <label class="col-form-label col-md-2 col-sm-2 label-align">AI Check</label>
                                     <div class="col-md-1 col-sm-1 pt-2">
                                         <input type="checkbox" name="cenable_double_confirm" value="1" <?php echo ($cenable_double_confirm == '1') ? 'checked' : ''; ?> style="transform: scale(1.3);">
                                     </div>
-                                    <label class="col-form-label col-md-2 col-sm-2 label-align">Áp dụng từ lệnh thứ N</label>
+                                    <label class="col-form-label col-md-2 col-sm-2 label-align">Áp dụng từ lệnh thứ</label>
                                     <div class="col-md-2 col-sm-2">
                                         <input type="number" min="1" name="v38_txt_nconfirm_from_order" value="<?php echo ($cbof_cbot_version == 'Onefxhub_v38') ? $txt_nconfirm_from_order : '19'; ?>" class="form-control" placeholder="19">
                                     </div>
@@ -564,21 +559,38 @@
                                     <label class="col-form-label col-md-2 col-sm-2 label-align" style="font-weight: bold; color: #2980b9;">Chiến lược vào lệnh</label>
                                     <div class="col-md-4 col-sm-4">
                                         <select name="nentry_strategy" id="nentry_strategy" class="form-control" style="font-weight: bold;">
-                                            <option value="0" <?php echo ($nentry_strategy == 0) ? 'selected' : ''; ?>>0: V26 truyền thống</option>
-                                            <option value="1" <?php echo ($nentry_strategy == 1) ? 'selected' : ''; ?>>1: GLOBAL Grid Mode 1 (Nhóm lệnh + Phá biên)</option>
+                                            <option value="0" <?php echo ($nentry_strategy == 0) ? 'selected' : ''; ?>>EAVEXI V1 Grid</option>
+                                            <option value="1" <?php echo ($nentry_strategy == 1) ? 'selected' : ''; ?>>AI VEXI PRO +</option>
                                         </select>
                                     </div>
                                 </div>
 
-                                <div id="div_v38_global_mode" style="background: #ebf5fb; border: 1px solid #aed6f1; border-radius: 6px; padding: 15px; margin-bottom: 20px; <?php echo ($nentry_strategy == 1) ? '' : 'display: none;'; ?>">
+                                <div id="div_v38_global_mode" style="background: #ebf5fb; border: 1px solid #aed6f1; border-radius: 6px; padding: 15px; margin-bottom: 20px;">
+                                    <div style="font-weight: bold; color: #2980b9; margin-bottom: 12px; font-size: 13.5px;">
+                                        <i class="fa fa-sliders"></i> THIẾT LẬP THAM SỐ ZONE GRID (Áp dụng cho AI VEXI PRO +)
+                                    </div>
                                     <div class="item form-group" style="margin-bottom: 10px;">
-                                        <label class="col-form-label col-md-2 col-sm-2 label-align">Số lệnh mỗi nhóm K</label>
+                                        <label class="col-form-label col-md-2 col-sm-2 label-align">MaxZones AI Scan</label>
                                         <div class="col-md-2 col-sm-2">
-                                            <input type="number" min="2" name="nglobal_orders_per_group" value="<?php echo $nglobal_orders_per_group; ?>" class="form-control" placeholder="6">
+                                            <input type="number" min="1" name="nmax_zones" value="<?php echo $nmax_zones; ?>" class="form-control" placeholder="10">
                                         </div>
-                                        <label class="col-form-label col-md-2 col-sm-2 label-align">Khoảng phá vỡ D (USD XAU)</label>
+                                        <label class="col-form-label col-md-2 col-sm-2 label-align">Required Zones / Phase 2</label>
                                         <div class="col-md-2 col-sm-2">
-                                            <input type="number" step="0.1" name="fglobal_breakout_distance_usd" value="<?php echo $fglobal_breakout_distance_usd; ?>" class="form-control" placeholder="3.0">
+                                            <input type="number" min="1" name="nzone_phase1_unlock_zones" value="<?php echo $nzone_phase1_unlock_zones; ?>" class="form-control" placeholder="3">
+                                        </div>
+                                        <label class="col-form-label col-md-2 col-sm-2 label-align">MaxRounds / Zone</label>
+                                        <div class="col-md-2 col-sm-2">
+                                            <input type="number" min="1" name="nmax_rounds_per_zone" value="<?php echo $nmax_rounds_per_zone; ?>" class="form-control" placeholder="2">
+                                        </div>
+                                    </div>
+                                    <div class="item form-group" style="margin-bottom: 10px;">
+                                        <label class="col-form-label col-md-2 col-sm-2 label-align">MaxOrder / Round</label>
+                                        <div class="col-md-2 col-sm-2">
+                                            <input type="number" min="1" name="norders_per_zone_per_round" value="<?php echo $norders_per_zone_per_round; ?>" class="form-control" placeholder="3">
+                                        </div>
+                                        <label class="col-form-label col-md-2 col-sm-2 label-align">ZoneStep</label>
+                                        <div class="col-md-2 col-sm-2">
+                                            <input type="number" step="0.1" min="0.1" name="fzone_step_usd" value="<?php echo $fzone_step_usd; ?>" class="form-control" placeholder="2.0">
                                         </div>
                                     </div>
                                     <div class="item form-group" style="margin-bottom: 0;">
@@ -590,33 +602,25 @@
                                     </div>
                                 </div>
 
-                                <h5 class="qcare-form-section-title" style="background: #16a085; color: #fff;"><i class="fa fa-retweet"></i> IX. CHẾ ĐỘ PAIRCLOSE (V26 vs V38 RECURSIVE PAIR_A)</h5>
-                                <div class="item form-group">
-                                    <label class="col-form-label col-md-2 col-sm-2 label-align" style="font-weight: bold; color: #16a085;">Chế độ PairClose</label>
-                                    <div class="col-md-4 col-sm-4">
-                                        <select name="npairclose_mode" id="npairclose_mode" class="form-control" style="font-weight: bold;">
-                                            <option value="1" <?php echo ($npairclose_mode == 1) ? 'selected' : ''; ?>>1: V38 Recursive Pair_A (RPA Rebase Lk*)</option>
-                                            <option value="0" <?php echo ($npairclose_mode == 0) ? 'selected' : ''; ?>>0: V26 Legacy PairClose (Chốt cặp 2 lệnh cuối)</option>
-                                        </select>
+                                <!-- CẤU HÌNH CHỐT CẶP (PAIRCLOSE) CHO EA-AIVEXI (V38) -->
+                                <div style="background: #ffffff; border: 1px solid #ced4da; border-radius: 6px; padding: 15px; margin-bottom: 20px;">
+                                    <div style="font-weight: bold; color: #2e6da4; margin-bottom: 12px; font-size: 13.5px;">
+                                        <i class="fa fa-compress"></i> CHỨC NĂNG CHỐT CẶP (PAIRCLOSE - THU HỒI VỐN LỆNH CUỐI)
                                     </div>
-                                </div>
-
-                                <!-- THIẾT LẬP PAIRCLOSE MODE 0 (V26) -->
-                                <div id="div_v38_pc_mode_0" style="background: #e8f8f5; border: 1px solid #a3e4d7; border-radius: 6px; padding: 15px; margin-bottom: 20px; <?php echo ($npairclose_mode == 0) ? '' : 'display: none;'; ?>">
+                                    <input type="hidden" name="v38_hidden_pair_close_marker" value="1">
+                                    <input type="hidden" name="v38_hidden_pair_close_danve_marker" value="1">
                                     <div class="item form-group" style="margin-bottom: 0;">
-                                        <input type="hidden" name="v38_hidden_pair_close_marker" value="1">
-                                        <input type="hidden" name="v38_hidden_pair_close_danve_marker" value="1">
-                                        <label class="col-form-label col-md-2 col-sm-2 label-align">Bật chốt cặp V26</label>
+                                        <label class="col-form-label col-md-2 col-sm-2 label-align">Bật chốt cặp</label>
                                         <div class="col-md-1 col-sm-1 pt-2">
                                             <input type="checkbox" name="v38_cbof_cpair_close_bat_tat" value="1" <?php echo ($cbof_cpair_close_bat_tat == '1') ? 'checked' : ''; ?> style="transform: scale(1.3);">
                                         </div>
                                         <label class="col-form-label col-md-2 col-sm-2 label-align">Áp dụng từ tầng</label>
-                                        <div class="col-md-1 col-sm-1">
-                                            <input type="number" min="2" name="v38_txt_npair_close_tu_lenh" value="<?php echo ($cbof_cbot_version == 'Onefxhub_v38') ? $txt_npair_close_tu_lenh : '12'; ?>" class="form-control">
+                                        <div class="col-md-2 col-sm-2">
+                                            <input type="number" min="2" name="v38_txt_npair_close_tu_lenh" value="<?php echo $txt_npair_close_tu_lenh; ?>" class="form-control" placeholder="12">
                                         </div>
-                                        <label class="col-form-label col-md-2 col-sm-2 label-align">Lãi 2 lệnh cuối ($)</label>
+                                        <label class="col-form-label col-md-2 col-sm-2 label-align">Lợi nhuận cặp ($)</label>
                                         <div class="col-md-1 col-sm-1">
-                                            <input type="number" step="0.1" name="v38_txt_fpair_close_so_usd" value="<?php echo ($cbof_cbot_version == 'Onefxhub_v38') ? $txt_fpair_close_so_usd : '2.0'; ?>" class="form-control">
+                                            <input type="number" step="0.1" name="v38_txt_fpair_close_so_usd" value="<?php echo $txt_fpair_close_so_usd; ?>" class="form-control" placeholder="2.0">
                                         </div>
                                         <label class="col-form-label col-md-1 col-sm-1 label-align">Chốt dần về</label>
                                         <div class="col-md-1 col-sm-1 pt-2">
@@ -625,21 +629,7 @@
                                     </div>
                                 </div>
 
-                                <!-- THIẾT LẬP PAIRCLOSE MODE 1 (RPA) -->
-                                <div id="div_v38_pc_mode_1" style="background: #eafaf1; border: 1px solid #a9dfbf; border-radius: 6px; padding: 15px; margin-bottom: 20px; <?php echo ($npairclose_mode == 1) ? '' : 'display: none;'; ?>">
-                                    <div class="item form-group" style="margin-bottom: 0;">
-                                        <label class="col-form-label col-md-3 col-sm-3 label-align">Grid gốc xét PairClose từ cấp N >=</label>
-                                        <div class="col-md-2 col-sm-2">
-                                            <input type="number" min="2" name="noriginal_pairclose_start_order" value="<?php echo $noriginal_pairclose_start_order; ?>" class="form-control" placeholder="20">
-                                        </div>
-                                        <label class="col-form-label col-md-3 col-sm-3 label-align">Target level k của Lk*</label>
-                                        <div class="col-md-2 col-sm-2">
-                                            <input type="number" min="1" name="nrecursive_rebase_target_level" value="<?php echo $nrecursive_rebase_target_level; ?>" class="form-control" placeholder="15">
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <h5 class="qcare-form-section-title" style="background: #73879c; color: #fff;"><i class="fa fa-th"></i> X. CẤU HÌNH BƯỚC LƯỚI GRID GN (G1 - G25 PIP - V38)</h5>
+                                <h5 class="qcare-form-section-title" style="background: #73879c; color: #fff;"><i class="fa fa-th"></i> IX. CẤU HÌNH BƯỚC LƯỚI GRID GN (G1 - G25 PIP - V38)</h5>
                                 <div class="item form-group" style="background: #f2f5f7; padding: 15px; border-radius: 6px; border: 1px solid #e0e4e6;">
                                     <p class="text-muted" style="margin-left: 10px; font-weight: bold;"><i class="fa fa-info-circle"></i> Bước lưới chuẩn cho V38: GN = khoảng từ L1 tới lệnh N+1 (pip, 4 pip = 0.4 giá):</p>
                                     <div class="row" style="margin: 0;">
@@ -700,86 +690,6 @@ document.addEventListener("DOMContentLoaded", function() {
         botVersionSelect.addEventListener('change', toggleBotVersion);
     }
 
-    // Toggle Global Mode Sub-settings in V38
-    var entryStrategySelect = document.getElementById('nentry_strategy');
-    var divGlobalMode = document.getElementById('div_v38_global_mode');
-    function toggleEntryStrategy() {
-        if (!entryStrategySelect || !divGlobalMode) return;
-        divGlobalMode.style.display = (entryStrategySelect.value === '1') ? 'block' : 'none';
-    }
-    if (entryStrategySelect) {
-        entryStrategySelect.addEventListener('change', toggleEntryStrategy);
-    }
-
-    // Toggle PairClose Modes in V38
-    var paircloseModeSelect = document.getElementById('npairclose_mode');
-    var divPcMode0 = document.getElementById('div_v38_pc_mode_0');
-    var divPcMode1 = document.getElementById('div_v38_pc_mode_1');
-    function togglePaircloseMode() {
-        if (!paircloseModeSelect) return;
-        if (paircloseModeSelect.value === '0') {
-            if (divPcMode0) divPcMode0.style.display = 'block';
-            if (divPcMode1) divPcMode1.style.display = 'none';
-        } else {
-            if (divPcMode0) divPcMode0.style.display = 'none';
-            if (divPcMode1) divPcMode1.style.display = 'block';
-        }
-    }
-    if (paircloseModeSelect) {
-        paircloseModeSelect.addEventListener('change', togglePaircloseMode);
-    }
-});
-</script>
-
-
-<script type="text/javascript">
-document.addEventListener("DOMContentLoaded", function() {
-    var botVersionSelect = document.getElementById('cbof_cbot_version');
-    var sectionV33 = document.getElementById('section_bot_v33');
-    var sectionV38 = document.getElementById('section_bot_v38');
-
-    function toggleBotVersion() {
-        if (!botVersionSelect) return;
-        if (botVersionSelect.value === 'Onefxhub_v38') {
-            if (sectionV33) sectionV33.style.display = 'none';
-            if (sectionV38) sectionV38.style.display = 'block';
-        } else {
-            if (sectionV33) sectionV33.style.display = 'block';
-            if (sectionV38) sectionV38.style.display = 'none';
-        }
-    }
-
-    if (botVersionSelect) {
-        botVersionSelect.addEventListener('change', toggleBotVersion);
-    }
-
-    // Toggle Global Mode Sub-settings in V38
-    var entryStrategySelect = document.getElementById('nentry_strategy');
-    var divGlobalMode = document.getElementById('div_v38_global_mode');
-    function toggleEntryStrategy() {
-        if (!entryStrategySelect || !divGlobalMode) return;
-        divGlobalMode.style.display = (entryStrategySelect.value === '1') ? 'block' : 'none';
-    }
-    if (entryStrategySelect) {
-        entryStrategySelect.addEventListener('change', toggleEntryStrategy);
-    }
-
-    // Toggle PairClose Modes in V38
-    var paircloseModeSelect = document.getElementById('npairclose_mode');
-    var divPcMode0 = document.getElementById('div_v38_pc_mode_0');
-    var divPcMode1 = document.getElementById('div_v38_pc_mode_1');
-    function togglePaircloseMode() {
-        if (!paircloseModeSelect) return;
-        if (paircloseModeSelect.value === '0') {
-            if (divPcMode0) divPcMode0.style.display = 'block';
-            if (divPcMode1) divPcMode1.style.display = 'none';
-        } else {
-            if (divPcMode0) divPcMode0.style.display = 'none';
-            if (divPcMode1) divPcMode1.style.display = 'block';
-        }
-    }
-    if (paircloseModeSelect) {
-        paircloseModeSelect.addEventListener('change', togglePaircloseMode);
-    }
+    // Zone Grid settings are always displayed for easy configuration
 });
 </script>

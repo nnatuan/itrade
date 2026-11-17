@@ -149,8 +149,8 @@ class do_init extends CI_Controller
 		// BAT BUOC PHAI DU`NG SESSION CHUAN CUA HTML SERVER
 		//
 		 		 
-		// Kich hoat bien co khoi dong ung dung sau khi khoi tao thanh cong cac bien moi truong
-		redirect('do_login');
+		// Hien thi man hinh loading chao mung va khoi tao he thong
+		$this->load->view('splash_view');
 	}
 		
 	// ------------------------------------------------------------------------

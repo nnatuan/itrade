@@ -38,9 +38,15 @@ $active_group = "default";
 $active_record = TRUE;
 
 $db['default']['hostname'] = "localhost";
-$db['default']['username'] = "hethongso";
-$db['default']['password'] = "kIkAKDwi3s8cpEe";
-$db['default']['database'] = "hethongso";
+if (isset($_SERVER['HTTP_HOST']) && (strpos($_SERVER['HTTP_HOST'], 'localhost') !== false || strpos($_SERVER['HTTP_HOST'], '127.0.0.1') !== false)) {
+	$db['default']['username'] = "root";
+	$db['default']['password'] = "";
+	$db['default']['database'] = "itrade";
+} else {
+	$db['default']['username'] = "hethongso";
+	$db['default']['password'] = "kIkAKDwi3s8cpEe";
+	$db['default']['database'] = "hethongso";
+}
 $db['default']['dbdriver'] = "mysqli";
 $db['default']['dbprefix'] = "ea_";
 $db['default']['pconnect'] = TRUE;
